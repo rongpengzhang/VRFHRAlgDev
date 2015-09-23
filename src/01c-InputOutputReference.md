@@ -1,5 +1,5 @@
 
-### GroundHeatExchanger:Vertical
+### GroundHeatExchanger:Vertical 
 
 The EnergyPlus Ground loop heat exchanger is a condenser component. This serves the condenser supply side in addition to the cooling towers and other condensing components. The following figure shows the Ground Heat Exchanger in the simulation environment.
 
