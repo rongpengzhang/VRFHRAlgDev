@@ -9,6 +9,7 @@
 #include <EnergyPlus.hh>
 #include <DataGlobals.hh>
 #include <DataHVACGlobals.hh>
+#include <DataEnvironment.hh>
 
 namespace EnergyPlus {
 
@@ -17,6 +18,7 @@ namespace DXCoils {
 	// Using/Aliasing
 	using DataHVACGlobals::AirCooled;
 	using DataHVACGlobals::DryBulbIndicator;
+	using DataEnvironment::StdBaroPress;
 
 	// Data
 	//MODULE PARAMETER DEFINITIONS
@@ -94,6 +96,7 @@ namespace DXCoils {
 	extern Real64 HPWHHeatingCapacity; // Used by Heat Pump:Water Heater object as total water heating capacity [W]
 	extern Real64 HPWHHeatingCOP; // Used by Heat Pump:Water Heater object as water heating COP [W/W]
 	extern bool GetCoilsInputFlag; // First time, input is "gotten"
+	extern bool MyOneTimeFlag; // One time flag used to allocate MyEnvrnFlag and MySizeFlag
 	extern int NumVRFHeatingCoils; // number of VRF heat pump heating coils
 	extern int NumVRFCoolingCoils; // number of VRF heat pump cooling coils
 	extern int NumDXHeatingCoils; // number of DX heat pump heating coils
@@ -398,6 +401,7 @@ namespace DXCoils {
 		Array1D< Real64 > MSFanPowerPerEvapAirFlowRate;
 		Real64 FuelUsed; // Energy used, in addition to electricity [W]
 		Real64 FuelConsumed; // Energy consumed, in addition to electricity [J]
+		bool MSHPHeatRecActive; // True when entered Heat Rec Vol Flow Rate > 0
 		// End of multispeed DX coil input
 		// VRF system variables used for sizing
 		bool CoolingCoilPresent; // FALSE if coil not present
@@ -425,13 +429,13 @@ namespace DXCoils {
 		Real64 SecCoilAirFlowScalingFactor; // secondary coil air flow rate autosize scaling factor
 		Real64 SecCoilRatedSHR; // secondary coil nominal or rated sensible heat ratio
 		Real64 SecCoilSHR; // secondary coil current sensible heat ratio
-		int SecZoneAirNodeNum; // secondary zone air node number
 		Real64 EvapInletWetBulb; // secondary DX coil inlet wet bulb temperature (zone air node wet bulb temp.)
 		Real64 SecCoilSensibleHeatGainRate; // secondary zone sensible heat gain rate [W]
 		Real64 SecCoilTotalHeatRemovalRate; // secondary zone total heat removal rate [W]
 		Real64 SecCoilSensibleHeatRemovalRate; // secondary zone sensible heat removal rate [W]
 		Real64 SecCoilLatentHeatRemovalRate; // secondary zone latent heat removal rate [W]
 		bool IsSecondaryDXCoilInZone; // true means secondary dx coil is zone instead of outside
+		bool IsDXCoilInZone; // true means dx coil is in zone instead of outside
 		Real64 CompressorPartLoadRatio; // compressor part load ratio of the primary DX coil
 		Array1D_int MSSecCoilSHRFT; // index to the multi speed secondary coil sensible heat ratio temperature modifier curve
 		Array1D_int MSSecCoilSHRFF; //  index to the multi speed secondary coil sensible heat ratio flow fraction modifier curve
@@ -642,6 +646,7 @@ namespace DXCoils {
 			NumOfSpeeds( 0 ),
 			PLRImpact( false ),
 			LatentImpact( false ),
+			MSHPHeatRecActive( false ),
 			CoolingCoilPresent( true ),
 			HeatingCoilPresent( true ),
 			ISHundredPercentDOASDXCoil( false ),
@@ -662,13 +667,13 @@ namespace DXCoils {
 			SecCoilAirFlowScalingFactor( 1.0 ),
 			SecCoilRatedSHR( 1.0 ),
 			SecCoilSHR( 1.0 ),
-			SecZoneAirNodeNum( 0 ),
 			EvapInletWetBulb( 0.0 ),
 			SecCoilSensibleHeatGainRate( 0.0 ),
 			SecCoilTotalHeatRemovalRate( 0.0 ),
 			SecCoilSensibleHeatRemovalRate( 0.0 ),
 			SecCoilLatentHeatRemovalRate( 0.0 ),
 			IsSecondaryDXCoilInZone( false ),
+			IsDXCoilInZone( false ),
 			CompressorPartLoadRatio( 0.0 ),
 			//MSSecCoilSHRFT( 0 ),
 			//MSSecCoilSHRFF( 0 ),
@@ -917,6 +922,7 @@ namespace DXCoils {
 			Array1< Real64 > const & MSFanPowerPerEvapAirFlowRate,
 			Real64 const FuelUsed, // Energy used, in addition to electricity [W]
 			Real64 const FuelConsumed, // Energy consumed, in addition to electricity [J]
+			bool const MSHPHeatRecActive, // True when entered Heat Rec Vol Flow Rate > 0
 			bool const CoolingCoilPresent, // FALSE if coil not present
 			bool const HeatingCoilPresent, // FALSE if coil not present
 			bool const ISHundredPercentDOASDXCoil, // FALSE if coil is regular dx coil
@@ -937,13 +943,13 @@ namespace DXCoils {
 			Real64 const SecCoilAirFlowScalingFactor, // secondary coil air flow rate autosize scaling factor
 			Real64 const SecCoilRatedSHR, // secondary coil nominal or rated sensible heat ratio
 			Real64 const SecCoilSHR, // secondary coil current sensible heat ratio
-			int const SecZoneAirNodeNum, // secondary zone air node number
 			Real64 const EvapInletWetBulb, // secondary DX coil inlet wet bulb temperature (zone air node wet bulb temp.)
 			Real64 const SecCoilSensibleHeatGainRate, // secondary zone sensible heat gain rate [W]
 			Real64 const SecCoilTotalHeatRemovalRate, // secondary zone total heat removal rate [W]
 			Real64 const SecCoilSensibleHeatRemovalRate, // secondary zone sensible heat removal rate [W]
 			Real64 const SecCoilLatentHeatRemovalRate, // secondary zone latent heat removal rate [W]
 			bool const IsSecondaryDXCoilInZone, // true means secondary dx coil is zone instead of outside
+			bool const IsDXCoilInZone, // true means dx coil is in zone instead of outside
 			Real64 const CompressorPartLoadRatio, // compressor part load ratio of the primary DX coil
 			Array1_int const & MSSecCoilSHRFT, // index to the multi speed secondary coil sensible heat ratio temperature modifier curve
 			Array1_int const & MSSecCoilSHRFF, //  index to the multi speed secondary coil sensible heat ratio flow fraction modifier curve
@@ -1189,6 +1195,7 @@ namespace DXCoils {
 			MSFanPowerPerEvapAirFlowRate( MSFanPowerPerEvapAirFlowRate ),
 			FuelUsed( FuelUsed ),
 			FuelConsumed( FuelConsumed ),
+			MSHPHeatRecActive( MSHPHeatRecActive ),
 			CoolingCoilPresent( CoolingCoilPresent ),
 			HeatingCoilPresent( HeatingCoilPresent ),
 			ISHundredPercentDOASDXCoil( ISHundredPercentDOASDXCoil ),
@@ -1209,13 +1216,13 @@ namespace DXCoils {
 			SecCoilAirFlowScalingFactor( SecCoilAirFlowScalingFactor ),
 			SecCoilRatedSHR( SecCoilRatedSHR ),
 			SecCoilSHR( SecCoilSHR ),
-			SecZoneAirNodeNum( SecZoneAirNodeNum ),
 			EvapInletWetBulb( EvapInletWetBulb ),
 			SecCoilSensibleHeatGainRate( SecCoilSensibleHeatGainRate ),
 			SecCoilTotalHeatRemovalRate( SecCoilTotalHeatRemovalRate ),
 			SecCoilSensibleHeatRemovalRate( SecCoilSensibleHeatRemovalRate ),
 			SecCoilLatentHeatRemovalRate( SecCoilLatentHeatRemovalRate ),
 			IsSecondaryDXCoilInZone( IsSecondaryDXCoilInZone ),
+			IsDXCoilInZone( IsDXCoilInZone ),
 			CompressorPartLoadRatio( CompressorPartLoadRatio ),
 			MSSecCoilSHRFT( MSSecCoilSHRFT ),
 			MSSecCoilSHRFF( MSSecCoilSHRFF ),
@@ -1400,8 +1407,22 @@ namespace DXCoils {
 		Real64 const InletAirHumRat, // inlet air humidity ratio [kg water / kg dry air]
 		Real64 const TotCap, // total cooling  capacity [Watts]
 		Real64 const AirMassFlowRate, // the air mass flow rate at the given capacity [kg/s]
-		Real64 const SHR // sensible heat ratio at the given capacity and flow rate
+		Real64 const SHR, // sensible heat ratio at the given capacity and flow rate
+		bool const PrintFlag = true, // flag used to print warnings if desired
+		Real64 const BaroPress=StdBaroPress // Barometric pressure [Pa]
 	);
+
+	Real64
+	ValidateADP(
+		std::string const & UnitType, // component name
+		std::string const & UnitName, // component type
+		Real64 const RatedInletAirTemp, // coil inlet air temperature [C]
+		Real64 const RatedInletAirHumRat, // coil inlet air humidity ratio [kg/kg]
+		Real64 const TotCap, // coil total capacity [W]
+		Real64 const AirMassFlow, // coil air mass flow rate [kg/s]
+		Real64 const InitialSHR, // coil sensible heat ratio []
+		std::string const CallingRoutine // function name calling this routine 
+		);
 
 	Real64
 	CalcEffectiveSHR(
@@ -1675,28 +1696,43 @@ namespace DXCoils {
 	);
 	
 	void
-	CalcVRFIUEvapCondTemp(
-		int const VRFTUNum, // the number of the VRF TU to be simulated
-		Real64 & EvapTemp, // evaporating temperature
-		Real64 & CondTemp  // condensing temperature 
+	ControlVRFIUCoil (
+		int const CoilIndex,  // index to VRFTU coil 
+		Real64 const QCoil,   // coil load
+		Real64 const Tin,     // inlet air temperature
+		Real64 const Win,     // inlet air humidity ratio
+		Real64 const TeTc,    // evaporating or condensing temperature
+		Real64 const OAMassFlow,  // mass flow rate of outdoor air 
+		Real64 & FanSpdRatio, // fan speed ratio: actual flow rate / rated flow rate
+		Real64 & Wout,    // outlet air humidity ratio
+		Real64 & Tout, // outlet air temperature
+		Real64 & Hout, // outlet air enthalpy
+		Real64 & SHact,   // actual SH
+		Real64 & SCact    // actual SC
 	);
 	
 	void
-	CalcVRFIUAirFlow (
-		int const ZoneIndex,  // index to zone where the VRF Terminal Unit resides 
-		int const Mode,       // mode 0 for cooling, 1 for heating, 2 for neither cooling nor heating
-		Real64 const Temp,    // evaporating or condensing temperature
-		int const CoolCoil,   // index to VRFTU cooling coil 
-		int const HeatCoil,   // index to VRFTU heating coil
-		bool SHSCModify,      // indicate whether SH/SC would be modified
-		Real64 & FanSpdRatio, // fan speed ratio
-		Real64 & Wout,    // outlet air humidity ratio
-		Real64 & Toutlet, // outlet air temperature
-		Real64 & Houtlet, // outlet air enthalpy
-		Real64 & HcoilIn, // inlet air enthalpy
-		Real64 & TcoilIn, // coil inlet temperature
-		Real64 & SHact,   // actual SH
-		Real64 & SCact    // actual SC
+	CalcVRFCoilSenCap(
+		int const OperationMode, // mode 0 for cooling, 1 for heating
+		int const CoilNum,  // index to VRFTU cooling or heating coil 
+		Real64 const Tinlet,// dry bulb temperature of air entering the coil
+		Real64 const TeTc,  // evaporating or condensing temperature
+		Real64 const SHSC,  // SH at cooling /SC at heating
+		Real64 const BF,    // Bypass factor
+		Real64 & Q_sen,     // VRF coil sensible capacity per air mass flow rate
+		Real64 & T_coil_surf// Air temperature at coil surface
+	);
+	
+	void
+	CalcVRFCoilCapModFac(
+		int const OperationMode, // mode 0 for cooling, 1 for heating
+		Optional< int const > CoilIndex,  // index to VRFTU cooling or heating coil
+		Optional< std::string > CoilName, // name of VRFTU cooling or heating coil
+		Real64 const Tinlet,// dry bulb temperature of air entering the coil
+		Optional< Real64 const > TeTc,  // evaporating or condensing temperature
+		Optional< Real64 const > SHSC,  // SH at cooling /SC at heating
+		Optional< Real64 const > BF,    // Bypass factor
+		Real64 & CapModFac // Coil capacity modification factor
 	);
 	
 	Real64 
@@ -1712,6 +1748,15 @@ namespace DXCoils {
 	);
 	// End of Methods for New VRF Model: Fluid Temperature Control
 	// *****************************************************************************
+
+	void
+	SetMSHPDXCoilHeatRecoveryFlag( int const DXCoilNum ); // must match coil names for the coil type
+
+	// Clears the global data in DXCoils.
+	// Needed for unit tests, should not be normally called.
+	void
+	clear_state();
+
 
 	//     NOTICE
 

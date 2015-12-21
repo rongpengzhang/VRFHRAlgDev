@@ -94,7 +94,7 @@
 ! Environmental Emissions:        None
 ! Utility Tariffs:                None
 
-  Version,8.3;
+  Version,8.4;
 
   Output:Diagnostics,
     DisplayAllWarnings;      !- Key 1
@@ -117,21 +117,19 @@
     R410A,                   !- Refrigerant Type
     41300,                   !- Rated Evaporative Capacity {W}
     0.344,                   !- Rated Compressor Power Per Unit of Rated Evaporative Capacity {W/W}
-    2.91,                    !- Reference Cooling COP
-    3.91,                    !- Reference Heating COP
-    ,                        !- Minimum Outdoor Air Temperature in Cooling Mode {C}
-    ,                        !- Maximum Outdoor Air Temperature in Cooling Mode {C}
-    ,                        !- Minimum Outdoor Air Temperature in Heating Mode {C}
-    ,                        !- Maximum Outdoor Air Temperature in Heating Mode {C}
+    -5,                      !- Minimum Outdoor Air Temperature in Cooling Mode {C}
+    43,                      !- Maximum Outdoor Air Temperature in Cooling Mode {C}
+    -20,                     !- Minimum Outdoor Air Temperature in Heating Mode {C}
+    22,                      !- Maximum Outdoor Air Temperature in Heating Mode {C}
     3,                       !- Reference Outdoor Unit Superheating Degrees {C}
     3,                       !- Reference Outdoor Unit Subcooling Degrees {C}
-    VariableTemp,            !- Refrigerant Temperature Control Algorithm for Indoor Unit
-    ,                        !- Reference Evaporating Temperature for Indoor Unit {C}
-    ,                        !- Reference Condensing Temperature for Indoor Unit {C}
+    ConstantTemp,            !- Refrigerant Temperature Control Algorithm for Indoor Unit
+    6,                       !- Reference Evaporating Temperature for Indoor Unit {C}
+    44,                      !- Reference Condensing Temperature for Indoor Unit {C}
     6,                       !- Variable Evaporating Temperature Minimum for Indoor Unit {C}
     13,                      !- Variable Evaporating Temperature Maximum for Indoor Unit {C}
     42,                      !- Variable Condensing Temperature Minimum for Indoor Unit {C}
-    46,                      !- Variable Evaporating Temperature Maximum for Indoor Unit {C}
+    46,                      !- Variable Condensing Temperature Maximum for Indoor Unit {C}
     4.12E-3,                 !- Outdoor Unit Fan Power Per Unit of Rated Evaporative Capacity {W/W}
     7.26E-5,                 !- Outdoor Unit Fan Flow Rate Per Unit of Rated Evaporative Capacity {m3/s-W}
     OUEvapTempCurve,         !- Outdoor Unit Evaporating Temperature Function of Superheating Curve Name
@@ -154,13 +152,13 @@
     ,                        !- Maximum Outdoor Dry-bulb Temperature for Defrost Operation {C}
     4500000,                 !- Compressor maximum delta Pressure {Pa}
     3,                       !- Number of Compressor Loading Index Entries
-    25,                      !- Compressor Speed at Loading Index 1 {rev/sec}
+    1500,                    !- Compressor Speed at Loading Index 1 {rev/min}
     MinSpdCooling,           !- Loading Index 1 Evaporative Capacity Multiplier Function of Temperature Curve Name
     MinSpdPower,             !- Loading Index 1 Compressor Power Multiplier Function of Temperature Curve Name
-    60,                      !- Compressor Speed at Loading Index 2 {rev/sec}
+    3600,                    !- Compressor Speed at Loading Index 2 {rev/min}
     Spd1Cooling,             !- Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
     Spd1Power,               !- Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
-    100,                     !- Compressor Speed at Loading Index 3 {rev/sec}
+    6000,                    !- Compressor Speed at Loading Index 3 {rev/min}
     Spd2Cooling,             !- Loading Index 3 Evaporative Capacity Multiplier Function of Temperature Curve Name
     Spd2Power;               !- Loading Index 3 Compressor Power Multiplier Function of Temperature Curve Name
 
@@ -173,8 +171,8 @@
     15,                      !- Maximum Value of x    
     ,                        !- Minimum Curve Output
     ,                        !- Maximum Curve Output
-    Dimensionless,           !- Input Unit Type for X
-    Dimensionless;           !- Output Unit Type
+    Temperature,             !- Input Unit Type for X
+    Temperature;             !- Output Unit Type
 
   Curve:Quadratic,
     OUCondTempCurve,         !- Name
@@ -185,8 +183,8 @@
     20,                      !- Maximum Value of x    
     ,                        !- Minimum Curve Output
     ,                        !- Maximum Curve Output
-    Dimensionless,           !- Input Unit Type for X
-    Dimensionless;           !- Output Unit Type
+    Temperature,             !- Input Unit Type for X
+    Temperature;             !- Output Unit Type
 	
   Curve:Biquadratic,
     MinSpdCooling,           !- Name
@@ -202,8 +200,8 @@
     15,                      !- Maximum Value of y
     ,                        !- Minimum Curve Output
     ,                        !- Maximum Curve Output
-    Dimensionless,           !- Input Unit Type for X
-    Dimensionless,           !- Input Unit Type for Y
+    Temperature,             !- Input Unit Type for X
+    Temperature,             !- Input Unit Type for Y
     Dimensionless;           !- Output Unit Type
 
   Curve:Biquadratic,
@@ -220,10 +218,10 @@
     15,                      !- Maximum Value of y
     ,                        !- Minimum Curve Output
     ,                        !- Maximum Curve Output
-    Dimensionless,           !- Input Unit Type for X
-    Dimensionless,           !- Input Unit Type for Y
+    Temperature,             !- Input Unit Type for X
+    Temperature,             !- Input Unit Type for Y
     Dimensionless;           !- Output Unit Type
-
+	
   Curve:Biquadratic,
     Spd1Cooling,             !- Name
     8.12E-01 ,               !- Coefficient1 Constant
@@ -238,8 +236,8 @@
     15,                      !- Maximum Value of y
     ,                        !- Minimum Curve Output
     ,                        !- Maximum Curve Output
-    Dimensionless,           !- Input Unit Type for X
-    Dimensionless,           !- Input Unit Type for Y
+    Temperature,             !- Input Unit Type for X
+    Temperature,             !- Input Unit Type for Y
     Dimensionless;           !- Output Unit Type
 
   Curve:Biquadratic,
@@ -256,8 +254,8 @@
     15,                      !- Maximum Value of y
     ,                        !- Minimum Curve Output
     ,                        !- Maximum Curve Output
-    Dimensionless,           !- Input Unit Type for X
-    Dimensionless,           !- Input Unit Type for Y
+    Temperature,             !- Input Unit Type for X
+    Temperature,             !- Input Unit Type for Y
     Dimensionless;           !- Output Unit Type
 
   Curve:Biquadratic,
@@ -274,8 +272,8 @@
     15,                      !- Maximum Value of y
     ,                        !- Minimum Curve Output
     ,                        !- Maximum Curve Output
-    Dimensionless,           !- Input Unit Type for X
-    Dimensionless,           !- Input Unit Type for Y
+    Temperature,             !- Input Unit Type for X
+    Temperature,             !- Input Unit Type for Y
     Dimensionless;           !- Output Unit Type
 
   Curve:Biquadratic,
@@ -292,8 +290,8 @@
     15,                      !- Maximum Value of y
     ,                        !- Minimum Curve Output
     ,                        !- Maximum Curve Output
-    Dimensionless,           !- Input Unit Type for X
-    Dimensionless,           !- Input Unit Type for Y
+    Temperature,             !- Input Unit Type for X
+    Temperature,             !- Input Unit Type for Y
     Dimensionless;           !- Output Unit Type
 	
 	
@@ -482,7 +480,7 @@
     TU1 VRF Supply Fan,      !- Name
     VRFAvailSched,           !- Availability Schedule Name
     0.7,                     !- Fan Total Efficiency
-    200,                     !- Pressure Rise {Pa}
+    600,                     !- Pressure Rise {Pa}
     autosize,                !- Maximum Flow Rate {m3/s}
     Fraction,                !- Fan Power Minimum Flow Rate Input Method
     0,                       !- Fan Power Minimum Flow Fraction
@@ -502,7 +500,7 @@
     TU2 VRF Supply Fan,      !- Name
     VRFAvailSched,           !- Availability Schedule Name
     0.7,                     !- Fan Total Efficiency
-    200,                     !- Pressure Rise {Pa}
+    600,                     !- Pressure Rise {Pa}
     autosize,                !- Maximum Flow Rate {m3/s}
     Fraction,                !- Fan Power Minimum Flow Rate Input Method
     0,                       !- Fan Power Minimum Flow Fraction
@@ -522,7 +520,7 @@
     TU3 VRF Supply Fan,      !- Name
     VRFAvailSched,           !- Availability Schedule Name
     0.7,                     !- Fan Total Efficiency
-    200,                     !- Pressure Rise {Pa}
+    600,                     !- Pressure Rise {Pa}
     autosize,                !- Maximum Flow Rate {m3/s}
     Fraction,                !- Fan Power Minimum Flow Rate Input Method
     0,                       !- Fan Power Minimum Flow Fraction
@@ -542,7 +540,7 @@
     TU4 VRF Supply Fan,      !- Name
     VRFAvailSched,           !- Availability Schedule Name
     0.7,                     !- Fan Total Efficiency
-    200,                     !- Pressure Rise {Pa}
+    600,                     !- Pressure Rise {Pa}
     autosize,                !- Maximum Flow Rate {m3/s}
     Fraction,                !- Fan Power Minimum Flow Rate Input Method
     0,                       !- Fan Power Minimum Flow Fraction
@@ -562,7 +560,7 @@
     TU5 VRF Supply Fan,      !- Name
     VRFAvailSched,           !- Availability Schedule Name
     0.7,                     !- Fan Total Efficiency
-    200,                     !- Pressure Rise {Pa}
+    600,                     !- Pressure Rise {Pa}
     autosize,                !- Maximum Flow Rate {m3/s}
     Fraction,                !- Fan Power Minimum Flow Rate Input Method
     0,                       !- Fan Power Minimum Flow Fraction
@@ -587,8 +585,8 @@
     TU1 VRF DX CCoil Outlet Node,  !- Coil Air Outlet Node
     autosize,                !- Rated Total Cooling Capacity {W}
     autosize,                !- Rated Sensible Heat Ratio
-	3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}    
-	IUEvapTempCurve,         !- Indoor Unit Evaporating Temperature Function of Superheating Curve Name    
+    3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}    
+    IUEvapTempCurve,         !- Indoor Unit Evaporating Temperature Function of Superheating Curve Name    
     ;                        !- Name of Water Storage Tank for Condensate Collection
 
   Coil:Cooling:DX:VariableRefrigerantFlow:FluidTemperatureControl,
@@ -598,8 +596,8 @@
     TU2 VRF DX CCoil Outlet Node,  !- Coil Air Outlet Node
     autosize,                !- Rated Total Cooling Capacity {W}
     autosize,                !- Rated Sensible Heat Ratio
-	3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}    
-	IUEvapTempCurve,         !- Indoor Unit Evaporating Temperature Function of Superheating Curve Name    
+    3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}    
+    IUEvapTempCurve,         !- Indoor Unit Evaporating Temperature Function of Superheating Curve Name    
     ;                        !- Name of Water Storage Tank for Condensate Collection
 
   Coil:Cooling:DX:VariableRefrigerantFlow:FluidTemperatureControl,
@@ -609,8 +607,8 @@
     TU3 VRF DX CCoil Outlet Node,  !- Coil Air Outlet Node
     autosize,                !- Rated Total Cooling Capacity {W}
     autosize,                !- Rated Sensible Heat Ratio
-	3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}    
-	IUEvapTempCurve,         !- Indoor Unit Evaporating Temperature Function of Superheating Curve Name    
+    3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}    
+    IUEvapTempCurve,         !- Indoor Unit Evaporating Temperature Function of Superheating Curve Name    
     ;                        !- Name of Water Storage Tank for Condensate Collection
 
   Coil:Cooling:DX:VariableRefrigerantFlow:FluidTemperatureControl,
@@ -620,8 +618,8 @@
     TU4 VRF DX CCoil Outlet Node,  !- Coil Air Outlet Node
     autosize,                !- Rated Total Cooling Capacity {W}
     autosize,                !- Rated Sensible Heat Ratio
-	3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}    
-	IUEvapTempCurve,         !- Indoor Unit Evaporating Temperature Function of Superheating Curve Name    
+    3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}    
+    IUEvapTempCurve,         !- Indoor Unit Evaporating Temperature Function of Superheating Curve Name    
     ;                        !- Name of Water Storage Tank for Condensate Collection
 
   Coil:Cooling:DX:VariableRefrigerantFlow:FluidTemperatureControl,
@@ -631,8 +629,8 @@
     TU5 VRF DX CCoil Outlet Node,  !- Coil Air Outlet Node
     autosize,                !- Rated Total Cooling Capacity {W}
     autosize,                !- Rated Sensible Heat Ratio
-	3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}    
-	IUEvapTempCurve,         !- Indoor Unit Evaporating Temperature Function of Superheating Curve Name    
+    3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}    
+    IUEvapTempCurve,         !- Indoor Unit Evaporating Temperature Function of Superheating Curve Name    
     ;                        !- Name of Water Storage Tank for Condensate Collection
 
   Curve:Quadratic,
@@ -644,8 +642,8 @@
     15,                      !- Maximum Value of x    
     ,                        !- Minimum Curve Output
     ,                        !- Maximum Curve Output
-    Dimensionless,           !- Input Unit Type for X
-    Dimensionless;           !- Output Unit Type
+    Temperature,             !- Input Unit Type for X
+    Temperature;             !- Output Unit Type
 
 !-   ===========  ALL OBJECTS IN CLASS: COIL:HEATING:DX:VARIABLEREFRIGERANTFLOW ===========
 
@@ -656,7 +654,7 @@
     TU1 VRF DX HCoil Outlet Node,  !- Coil Air Outlet Node
     autosize,                    !- Rated Total Heating Capacity {W}
     5,                       !- Indoor Unit Reference Subcooling Degrees Setpoint {C}    
-	IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
+    IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
 
   Coil:Heating:DX:VariableRefrigerantFlow:FluidTemperatureControl,
     TU2 VRF DX Heating Coil, !- Name
@@ -665,7 +663,7 @@
     TU2 VRF DX HCoil Outlet Node,  !- Coil Air Outlet Node
     autosize,                    !- Rated Total Heating Capacity {W}
     5,                       !- Indoor Unit Reference Subcooling Degrees Setpoint {C}    
-	IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
+    IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
 
   Coil:Heating:DX:VariableRefrigerantFlow:FluidTemperatureControl,
     TU3 VRF DX Heating Coil, !- Name
@@ -674,7 +672,7 @@
     TU3 VRF DX HCoil Outlet Node,  !- Coil Air Outlet Node
     autosize,                !- Rated Total Heating Capacity {W}
     5,                       !- Indoor Unit Reference Subcooling Degrees Setpoint {C}    
-	IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
+    IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
 
   Coil:Heating:DX:VariableRefrigerantFlow:FluidTemperatureControl,
     TU4 VRF DX Heating Coil, !- Name
@@ -683,7 +681,7 @@
     TU4 VRF DX HCoil Outlet Node,  !- Coil Air Outlet Node
     autosize,                !- Rated Total Heating Capacity {W}
     5,                       !- Indoor Unit Reference Subcooling Degrees Setpoint {C}    
-	IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
+    IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
 
   Coil:Heating:DX:VariableRefrigerantFlow:FluidTemperatureControl,
     TU5 VRF DX Heating Coil, !- Name
@@ -692,7 +690,7 @@
     TU5 VRF DX HCoil Outlet Node,  !- Coil Air Outlet Node
     autosize,                !- Rated Total Heating Capacity {W}
     5,                       !- Indoor Unit Reference Subcooling Degrees Setpoint {C}    
-	IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
+    IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
 
   Curve:Quadratic,
     IUCondTempCurve,         !- Name
@@ -703,8 +701,8 @@
     20,                      !- Maximum Value of x    
     ,                        !- Minimum Curve Output
     ,                        !- Maximum Curve Output
-    Dimensionless,           !- Input Unit Type for X
-    Dimensionless;           !- Output Unit Type
+    Temperature,             !- Input Unit Type for X
+    Temperature;             !- Output Unit Type
 
   Schedule:Compact,
     VRFAvailSched,           !- Name
