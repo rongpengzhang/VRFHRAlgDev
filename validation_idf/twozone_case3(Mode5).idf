@@ -7311,7 +7311,7 @@ ZoneHVAC:TerminalUnit:VariableRefrigerantFlow,
     TU1 VRF DX HCoil Outlet Node,  !- Coil Air Outlet Node
     25000,                    !- Rated Total Heating Capacity {W}
     5,                       !- Indoor Unit Reference Subcooling Degrees Setpoint {C}    
-    0.136,                   !- Coil Rated Bypass Factor {-}
+    0.127,                   !- Coil Rated Bypass Factor {-}
     IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
 
   Coil:Heating:DX:VariableRefrigerantFlow:FluidTemperatureControl,
@@ -7321,20 +7321,20 @@ ZoneHVAC:TerminalUnit:VariableRefrigerantFlow,
     TU2 VRF DX HCoil Outlet Node,  !- Coil Air Outlet Node
     37500,                    !- Rated Total Heating Capacity {W}
     5,                       !- Indoor Unit Reference Subcooling Degrees Setpoint {C}    
-    0.136,                   !- Coil Rated Bypass Factor {-}
+    0.127,                   !- Coil Rated Bypass Factor {-}
     IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
 
   Curve:Quadratic,
     IUCondTempCurve,         !- Name
-    5.509,                   !- Coefficient1 Constant
-    -0.53,                   !- Coefficient2 x
-    0.04,                   !- Coefficient3 x**2
+    4.364,                   !- Coefficient1 Constant
+    -0.78,                   !- Coefficient2 x
+    0.051,                   !- Coefficient3 x**2
     0,                       !- Minimum Value of x    
     20,                      !- Maximum Value of x    
     ,                        !- Minimum Curve Output
     ,                        !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
-    Temperature;             !- Output Unit Type	
+    Temperature;             !- Output Unit Type
 	
   ZoneHVAC:EquipmentList,
     Zone1 Equipment,             !- Name
