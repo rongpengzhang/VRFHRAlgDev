@@ -162,7 +162,7 @@ RunPeriod,
     1,                       !- Begin Day of Month
     1,                       !- End Month
     2,                       !- End Day of Month
-    UseWeatherFile,          !- Day of Week for Start Day
+    Monday,          !- Day of Week for Start Day
     No,                      !- Use Weather File Holidays and Special Days
     No,                      !- Use Weather File Daylight Saving Period
     Yes,                     !- Apply Weekend Holiday Rule
@@ -261,7 +261,7 @@ Schedule:Compact,
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
     Until: 24:00,            !- Field 3
-    25.8;                    !- Field 4
+    25.28;                    !- Field 4
 
 
 ! Modified schedule: Office_OpenOff_Heat
@@ -271,7 +271,7 @@ Schedule:Compact,
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
     Until: 24:00,            !- Field 3
-    21.7;                    !- Field 4
+    23.13;                    !- Field 4
 
 
 ! Modified schedule: Office_OpenOff_Cool
@@ -309,192 +309,256 @@ Schedule:Compact,
     Until: 24:00,            !- Field 3
     0;                     !- Field 4
 	
+Schedule:Compact,
+    Load_H_all0,           !- Name
+    Any Number,              !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00,            !- Field 3
+    0;                     !- Field 4
+	
 	
 ! schedules for cooling/heating load
 Schedule:Year,
-    Load_C_Case3,           !- Name
+    Load_C_IU1_Sensible_Case3,           !- Name
     Any Number,              !- Schedule Type Limits Name
-    Load_C_Case3_Week,           !- Schedule:Week Name 1
+    Load_C_IU1_Sensible_Case3_Week,           !- Schedule:Week Name 1
     1,                       !- Start Month 1
     1,                       !- Start Day 1
     12,                      !- End Month 1
     31;                      !- End Day 1
 
+! schedules for cooling/heating load
 Schedule:Year,
-    Load_H_Case3,           !- Name
+    Load_C_IU1_Latent_Case3,           !- Name
     Any Number,              !- Schedule Type Limits Name
-    Load_H_Case3_Week,           !- Schedule:Week Name 1
+    Load_C_IU1_Latent_Case3_Week,           !- Schedule:Week Name 1
     1,                       !- Start Month 1
     1,                       !- Start Day 1
     12,                      !- End Month 1
     31;                      !- End Day 1
+	
+Schedule:Year,
+    Load_H_IU2_Case3,           !- Name
+    Any Number,              !- Schedule Type Limits Name
+    Load_H_IU2_Case3_Week,           !- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+	
+Schedule:Week:Daily,
+    Load_C_IU1_Sensible_Case3_Week,           !- Name
+    Load_C_IU1_Sensible_Case3_Day,              !- Sunday Schedule:Day Name
+    Load_C_IU1_Sensible_Case3_Monday,              !- Monday Schedule:Day Name
+    Load_C_IU1_Sensible_Case3_Day,              !- Tuesday Schedule:Day Name
+    Load_C_IU1_Sensible_Case3_Day,              !- Wednesday Schedule:Day Name
+    Load_C_IU1_Sensible_Case3_Day,              !- Thursday Schedule:Day Name
+    Load_C_IU1_Sensible_Case3_Day,              !- Friday Schedule:Day Name
+    Load_C_IU1_Sensible_Case3_Day,              !- Saturday Schedule:Day Name
+    Load_C_IU1_Sensible_Case3_Day,              !- Holiday Schedule:Day Name
+    Load_C_IU1_Sensible_Case3_Day,              !- SummerDesignDay Schedule:Day Name
+    Load_C_IU1_Sensible_Case3_Day,              !- WinterDesignDay Schedule:Day Name
+    Load_C_IU1_Sensible_Case3_Day,              !- CustomDay1 Schedule:Day Name
+    Load_C_IU1_Sensible_Case3_Day;              !- CustomDay2 Schedule:Day Name
 
 Schedule:Week:Daily,
-    Load_C_Case3_Week,           !- Name
-    Load_C_Case3_Day,              !- Sunday Schedule:Day Name
-    Load_C_Case3_Day,              !- Monday Schedule:Day Name
-    Load_C_Case3_Day,              !- Tuesday Schedule:Day Name
-    Load_C_Case3_Day,              !- Wednesday Schedule:Day Name
-    Load_C_Case3_Day,              !- Thursday Schedule:Day Name
-    Load_C_Case3_Day,              !- Friday Schedule:Day Name
-    Load_C_Case3_Day,              !- Saturday Schedule:Day Name
-    Load_C_Case3_Day,              !- Holiday Schedule:Day Name
-    Load_C_Case3_Day,              !- SummerDesignDay Schedule:Day Name
-    Load_C_Case3_Day,              !- WinterDesignDay Schedule:Day Name
-    Load_C_Case3_Day,              !- CustomDay1 Schedule:Day Name
-    Load_C_Case3_Day;              !- CustomDay2 Schedule:Day Name
-
+    Load_C_IU1_Latent_Case3_Week,           !- Name
+    Load_C_IU1_Latent_Case3_Day,              !- Sunday Schedule:Day Name
+    Load_C_IU1_Latent_Case3_Monday,              !- Monday Schedule:Day Name
+    Load_C_IU1_Latent_Case3_Day,              !- Tuesday Schedule:Day Name
+    Load_C_IU1_Latent_Case3_Day,              !- Wednesday Schedule:Day Name
+    Load_C_IU1_Latent_Case3_Day,              !- Thursday Schedule:Day Name
+    Load_C_IU1_Latent_Case3_Day,              !- Friday Schedule:Day Name
+    Load_C_IU1_Latent_Case3_Day,              !- Saturday Schedule:Day Name
+    Load_C_IU1_Latent_Case3_Day,              !- Holiday Schedule:Day Name
+    Load_C_IU1_Latent_Case3_Day,              !- SummerDesignDay Schedule:Day Name
+    Load_C_IU1_Latent_Case3_Day,              !- WinterDesignDay Schedule:Day Name
+    Load_C_IU1_Latent_Case3_Day,              !- CustomDay1 Schedule:Day Name
+    Load_C_IU1_Latent_Case3_Day;              !- CustomDay2 Schedule:Day Name
+	
 Schedule:Week:Daily,
-    Load_H_Case3_Week,           !- Name
-    Load_H_Case3_Day,              !- Sunday Schedule:Day Name
-    Load_H_Case3_Day,              !- Monday Schedule:Day Name
-    Load_H_Case3_Day,              !- Tuesday Schedule:Day Name
-    Load_H_Case3_Day,              !- Wednesday Schedule:Day Name
-    Load_H_Case3_Day,              !- Thursday Schedule:Day Name
-    Load_H_Case3_Day,              !- Friday Schedule:Day Name
-    Load_H_Case3_Day,              !- Saturday Schedule:Day Name
-    Load_H_Case3_Day,              !- Holiday Schedule:Day Name
-    Load_H_Case3_Day,              !- SummerDesignDay Schedule:Day Name
-    Load_H_Case3_Day,              !- WinterDesignDay Schedule:Day Name
-    Load_H_Case3_Day,              !- CustomDay1 Schedule:Day Name
-    Load_H_Case3_Day;              !- CustomDay2 Schedule:Day Name	
+    Load_H_IU2_Case3_Week,           !- Name
+    Load_H_IU2_Case3_Day,              !- Sunday Schedule:Day Name
+    Load_H_IU2_Case3_Monday,              !- Monday Schedule:Day Name
+    Load_H_IU2_Case3_Day,              !- Tuesday Schedule:Day Name
+    Load_H_IU2_Case3_Day,              !- Wednesday Schedule:Day Name
+    Load_H_IU2_Case3_Day,              !- Thursday Schedule:Day Name
+    Load_H_IU2_Case3_Day,              !- Friday Schedule:Day Name
+    Load_H_IU2_Case3_Day,              !- Saturday Schedule:Day Name
+    Load_H_IU2_Case3_Day,              !- Holiday Schedule:Day Name
+    Load_H_IU2_Case3_Day,              !- SummerDesignDay Schedule:Day Name
+    Load_H_IU2_Case3_Day,              !- WinterDesignDay Schedule:Day Name
+    Load_H_IU2_Case3_Day,              !- CustomDay1 Schedule:Day Name
+    Load_H_IU2_Case3_Day;              !- CustomDay2 Schedule:Day Name	
+	
+Schedule:Day:Interval,
+    Load_C_IU1_Sensible_Case3_Monday,                 !- Name
+    Any Number,              !- Schedule Type Limits Name
+    No,                      !- Interpolate to Timestep
+    24:00,                   !- Time 1 {hh:mm}
+    9.186732376;        !- Value Until Time 1
+
+Schedule:Day:Interval,
+    Load_C_IU1_Latent_Case3_Monday,                 !- Name
+    Any Number,              !- Schedule Type Limits Name
+    No,                      !- Interpolate to Timestep
+    24:00,                   !- Time 1 {hh:mm}
+    1.87072208;        !- Value Until Time 1
+
+Schedule:Day:Interval,
+    Load_H_IU2_Case3_Monday,                 !- Name
+    Any Number,              !- Schedule Type Limits Name
+    No,                      !- Interpolate to Timestep
+    24:00,                   !- Time 1 {hh:mm}
+    -21.29061629;        !- Value Until Time 1
 
 Schedule:Day:List,
-    Load_C_Case3_Day,              !- Name
+    Load_C_IU1_Sensible_Case3_Day,              !- Name
     Any Number,              !- Schedule Type Limits Name
     No,                      !- Interpolate to Timestep
     1,                       !- Minutes per Item
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-2.022450269,
-1.974645987,
-1.921172507,
-1.860845208,
-1.791603031,
-1.734124036,
-1.676261251,
-1.633198183,
-1.56231802,
-1.501967601,
-1.456126147,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.18673237647917,
+9.2838922394375,
+9.38088558645833,
+9.409855995625,
+9.53538075525,
+9.55939067145833,
+9.6204159031875,
+9.6209467358125,
+9.76177817864583,
+9.89578044966667,
+9.91105652085417,
+9.9722832536875,
+10.0156342483333,
+10.0768471889375,
+10.1288102533125,
+10.1763470213125,
+10.1956584969167,
+10.2319108666875,
+10.2707763592917,
+10.3361239410833,
+10.326581736875,
+10.359479231,
 0,
 0,
 0,
@@ -505,6 +569,1443 @@ Schedule:Day:List,
 0,
 0,
 0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0;
+
+	
+Schedule:Day:List,
+    Load_C_IU1_Latent_Case3_Day,              !- Name
+    Any Number,              !- Schedule Type Limits Name
+    No,                      !- Interpolate to Timestep
+    1,                       !- Minutes per Item
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.87072208002937,
+1.85030196140112,
+1.85644640198926,
+1.8472282057423,
+1.84245140745523,
+1.85492060420736,
+1.80546861508777,
+1.76977743893437,
+1.76737733669707,
+1.68446935360035,
+1.68922208700979,
+1.75587551234079,
+1.79221372956077,
+1.87156589372003,
+1.91064844564853,
+1.88952353397109,
+1.8623926802396,
+1.87297111542588,
+1.89842309215629,
+1.90356805308554,
+1.86868007066392,
+1.84343661573082,
 0,
 0,
 0,
@@ -1806,153 +3307,152 @@ Schedule:Day:List,
 0;
 
 
-
 Schedule:Day:List,
-    Load_H_Case3_Day,              !- Name
+    Load_H_IU2_Case3_Day,              !- Name
     Any Number,              !- Schedule Type Limits Name
     No,                      !- Interpolate to Timestep
     1,                       !- Minutes per Item
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.796646,
--19.94541363,
--20.00887936,
--20.02407078,
--19.98195343,
--20.02086991,
--20.02561464,
--20.04871072,
--20.01930422,
--19.98018756,
--19.89215476,
-0,
-0,
-0,
-0,
-0,
-0,
-0,
-0,
-0,
-0,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.2906162850835,
+-21.070946735385,
+-20.9142165158932,
+-20.70782178533,
+-20.5372373533447,
+-20.4824737594379,
+-20.2147463670367,
+-20.0568073723723,
+-19.8964402628157,
+-19.7961872148358,
+-19.7050898990607,
+-20.0839500306737,
+-19.6976114867884,
+-19.3161204119994,
+-19.0116183446018,
+-18.6680300038252,
+-18.4458360528186,
+-18.3654146037397,
+-19.0274085757442,
+-18.8771940941307,
+-18.707671080718,
+-18.6308830075919,
 0,
 0,
 0,
@@ -3252,7 +4752,7 @@ Schedule:Day:List,
 0,
 0,
 0;
-
+	
 	
 	
 
@@ -5071,9 +6571,9 @@ BuildingSurface:Detailed,
 !-   ===========  ALL OBJECTS IN CLASS: OTHEREQUIPMENT ===========
 
 OtherEquipment,
-    Zone1Load_C,             !- Name
+    Zone1Load_C_Sensible,             !- Name
     Zone1,            !- Zone or ZoneList Name
-    Load_C_all0,        !- Schedule Name
+    Load_C_IU1_Sensible_Case3,        !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
     1000,                    !- Design Level {W}
     ,                        !- Power per Zone Floor Area {W/m2}
@@ -5083,9 +6583,21 @@ OtherEquipment,
     0;                       !- Fraction Lost
 
 OtherEquipment,
+    Zone1Load_C_Latent,             !- Name
+    Zone1,            !- Zone or ZoneList Name
+    Load_C_IU1_Latent_Case3,        !- Schedule Name
+    EquipmentLevel,          !- Design Level Calculation Method
+    1000,                    !- Design Level {W}
+    ,                        !- Power per Zone Floor Area {W/m2}
+    ,                        !- Power per Person {W/Person}
+    1,                       !- Fraction Latent
+    0,                       !- Fraction Radiant
+    0;                       !- Fraction Lost
+
+OtherEquipment,
     Zone2Load_H,             !- Name
     Zone2,            !- Zone or ZoneList Name
-    Load_H_Case3,        !- Schedule Name
+    Load_H_IU2_Case3,        !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
     1000,                    !- Design Level {W}
     ,                        !- Power per Zone Floor Area {W/m2}
@@ -5093,6 +6605,7 @@ OtherEquipment,
     0,                       !- Fraction Latent
     0,                       !- Fraction Radiant
     0;                       !- Fraction Lost
+
 
 
 
@@ -5154,12 +6667,12 @@ ThermostatSetpoint:DualSetpoint,
     VariableTemp,            !- Refrigerant Temperature Control Algorithm for Indoor Unit
     ,                        !- Reference Evaporating Temperature for Indoor Unit {C}
     ,                        !- Reference Condensing Temperature for Indoor Unit {C}
-    6,                       !- Variable Evaporating Temperature Minimum for Indoor Unit {C}
-    13,                      !- Variable Evaporating Temperature Maximum for Indoor Unit {C}
-    38,                      !- Variable Condensing Temperature Minimum for Indoor Unit {C}
+    5,                       !- Variable Evaporating Temperature Minimum for Indoor Unit {C}
+    14,                      !- Variable Evaporating Temperature Maximum for Indoor Unit {C}
+    36,                      !- Variable Condensing Temperature Minimum for Indoor Unit {C}
     46,                      !- Variable Condensing Temperature Maximum for Indoor Unit {C}
     0.026785714,                 !- Outdoor Unit Fan Power Per Unit of Rated Evaporative Capacity {W/W}
-    0.113095238,                 !- Outdoor Unit Fan Flow Rate Per Unit of Rated Evaporative Capacity {m3/s-W}
+    0.000113095238,                 !- Outdoor Unit Fan Flow Rate Per Unit of Rated Evaporative Capacity {m3/s-W}
     OUEvapTempCurve,         !- Outdoor Unit Evaporating Temperature Function of Superheating Curve Name
     OUCondTempCurve,         !- Outdoor Unit Condensing Temperature Function of Subcooling Curve Name
     LoadPriority,            !- Master Thermostat Priority Control Type
@@ -5189,53 +6702,48 @@ ThermostatSetpoint:DualSetpoint,
     2700,                    !- Compressor Speed at Loading Index 2 {rev/min}
     Spd1Cooling,             !- Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
     Spd1Power,               !- Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
-    3480,                    !- Compressor Speed at Loading Index 3 {rev/min}
+    3600,                    !- Compressor Speed at Loading Index 3 {rev/min}
     Spd2Cooling,             !- Loading Index 3 Evaporative Capacity Multiplier Function of Temperature Curve Name
     Spd2Power,               !- Loading Index 3 Compressor Power Multiplier Function of Temperature Curve Name
-    5340,                    !- Compressor Speed at Loading Index 4 {rev/min}
+    5400,                    !- Compressor Speed at Loading Index 4 {rev/min}
     Spd3Cooling,             !- Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
     Spd3Power,               !- Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
-    7020,                    !- Compressor Speed at Loading Index 5 {rev/min}
+    7200,                    !- Compressor Speed at Loading Index 5 {rev/min}
     Spd4Cooling,             !- Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
     Spd4Power,               !- Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
-    8280,                    !- Compressor Speed at Loading Index 6 {rev/min}
+    9000,                    !- Compressor Speed at Loading Index 6 {rev/min}
     Spd5Cooling,             !- Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
     Spd5Power,               !- Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
-    9900,                    !- Compressor Speed at Loading Index 7 {rev/min}
+    10800,                    !- Compressor Speed at Loading Index 7 {rev/min}
     Spd6Cooling,             !- Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
     Spd6Power,               !- Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
-    11520,                    !- Compressor Speed at Loading Index 8 {rev/min}
+    12960,                    !- Compressor Speed at Loading Index 8 {rev/min}
     Spd7Cooling,             !- Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
     Spd7Power,               !- Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
-	13260,                    !- Compressor Speed at Loading Index 9 {rev/min}
+    13260,                   !- Compressor Speed at Loading Index 9 {rev/min}
     Spd8Cooling,             !- Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
     Spd8Power,               !- Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
-    14700,                    !- Compressor Speed at Loading Index 10 {rev/min}
+    14700,                   !- Compressor Speed at Loading Index 10 {rev/min}
     Spd9Cooling,             !- Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
     Spd9Power,               !- Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
-    16860,                    !- Compressor Speed at Loading Index 11 {rev/min}
-    Spd10Cooling,             !- Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
-    Spd10Power,               !- Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
-    Yes,	!- Heat Pump Waste Heat Recovery
-    0,		!- Minimum Outdoor Unit Superheating {C}
-    15,		!- Maximum Outdoor Unit Superheating {C}
-    0,		!- Minimum Outdoor Unit Subcooling {C}
-    20,		!- Maximum Outdoor Unit Subcooling {C}
-    0.3;		!- Outdoor Unit Heat Exchanger Capacity Ratio
+    16860,                   !- Compressor Speed at Loading Index 11 {rev/min}
+    Spd10Cooling,            !- Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
+    Spd10Power,              !- Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
+    Yes,    	!- Heat Pump Waste Heat Recovery
+    0,      	!- Minimum Outdoor Unit Superheating {C}
+    15,     	!- Maximum Outdoor Unit Superheating {C}
+    0,      	!- Minimum Outdoor Unit Subcooling {C}
+    20,     	!- Maximum Outdoor Unit Subcooling {C}
+    0.3,    	!- Outdoor Unit Heat Exchanger Capacity Ratio
+    0.281,  	!- Outdoor Unit Evaporator Rated Bypass Factor
+    0.05,   	!- Outdoor Unit Condenser Rated Bypass Factor
+    1.0,    	!- Evaporative Capacity Correction Factor  Yoshi 
+    0.95;   	!- Compressor Inverter Efficiency
 
-	!13260,                    !- Compressor Speed at Loading Index 9 {rev/min}
-    !14700,                    !- Compressor Speed at Loading Index 10 {rev/min}
-    !Spd9Cooling,             !- Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
-    !Spd9Power,               !- Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
-    !16860,                    !- Compressor Speed at Loading Index 11 {rev/min}
-    !Spd10Cooling,             !- Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
-    !Spd10Power;               !- Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
-
-	
 
   Curve:Quadratic,
     OUEvapTempCurve,         !- Name
-    -0.2,                     !- Coefficient1 Constant
+    -0.266,                     !- Coefficient1 Constant
     0.511,                   !- Coefficient2 x
     0,   		             !- Coefficient3 x**2
     0,                       !- Minimum Value of x    
@@ -5259,12 +6767,12 @@ ThermostatSetpoint:DualSetpoint,
 	
   Curve:Biquadratic,
     MinSpdCooling,           !- Name
-0.110430374763027, !- Coefficient1 Constant
-0.000049873229123607, !- Coefficient2 x
--0.000012999479720718, !- Coefficient3 x**2
-0.00458742323341285, !- Coefficient4 y
-3.76686206308341E-05, !- Coefficient4 y
--0.000028192667494284, !- Coefficient6 x*y
+0.104079997965268, !- Coefficient1 Constant
+4.70052338122125E-05, !- Coefficient2 x
+-1.22519354460694E-05, !- Coefficient3 x**2
+0.0043236202161227, !- Coefficient4 y
+3.55024599619875E-05, !- Coefficient4 y
+-2.65714282120046E-05, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5277,12 +6785,12 @@ ThermostatSetpoint:DualSetpoint,
 
   Curve:Biquadratic,
     MinSpdPower,             !- Name
-0.0915948288825912, !- Coefficient1 Constant
--0.00227838982753542, !- Coefficient2 x
-6.54506872567426E-05, !- Coefficient3 x**2
--0.00123951606358379, !- Coefficient4 y
--1.43479220152384E-05, !- Coefficient4 y
-1.43770237698696E-05, !- Coefficient6 x*y
+0.0908711615487316, !- Coefficient1 Constant
+-0.0022603888518024, !- Coefficient2 x
+6.49335781041389E-05, !- Coefficient3 x**2
+-0.00122972296395194, !- Coefficient4 y
+-1.42345627503338E-05, !- Coefficient4 y
+1.42634345794393E-05, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5295,12 +6803,12 @@ ThermostatSetpoint:DualSetpoint,
 	
   Curve:Biquadratic,
     Spd1Cooling,             !- Name
-0.166682029048952, !- Coefficient1 Constant
--2.42747341972114E-05, !- Coefficient2 x
--1.76072187815744E-05, !- Coefficient3 x**2
-0.00685886339399977, !- Coefficient4 y
-6.10109897216003E-05, !- Coefficient4 y
--4.31764388710142E-05, !- Coefficient6 x*y
+0.157096861089979, !- Coefficient1 Constant
+-2.28787984399657E-05, !- Coefficient2 x
+-1.65947032136111E-05, !- Coefficient3 x**2
+0.0064644396038992, !- Coefficient4 y
+5.75025096103283E-05, !- Coefficient4 y
+-4.06935472191046E-05, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5313,12 +6821,12 @@ ThermostatSetpoint:DualSetpoint,
 
   Curve:Biquadratic,
     Spd1Power,               !- Name
-0.0863279159490486, !- Coefficient1 Constant
--0.000549595888213125, !- Coefficient2 x
-5.74000989726966E-05, !- Coefficient3 x**2
--0.00176023560960043, !- Coefficient4 y
--3.06290079855157E-05, !- Coefficient4 y
-2.62674455920027E-05, !- Coefficient6 x*y
+0.0856458611481976, !- Coefficient1 Constant
+-0.000545253671562083, !- Coefficient2 x
+5.69465954606142E-05, !- Coefficient3 x**2
+-0.00174632843791722, !- Coefficient4 y
+-3.03870160213618E-05, !- Coefficient4 y
+2.60599132176235E-05, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5331,12 +6839,12 @@ ThermostatSetpoint:DualSetpoint,
 
   Curve:Biquadratic,
     Spd2Cooling,             !- Name
-0.220860749526054, !- Coefficient1 Constant
-0.000099746458247214, !- Coefficient2 x
--0.000025998959441436, !- Coefficient3 x**2
-0.00917484646682569, !- Coefficient4 y
-7.53372412616683E-05, !- Coefficient4 y
--0.000056385334988568, !- Coefficient6 x*y
+0.208159995930535, !- Coefficient1 Constant
+0.000094010467624425, !- Coefficient2 x
+-2.45038708921389E-05, !- Coefficient3 x**2
+0.0086472404322454, !- Coefficient4 y
+7.10049199239751E-05, !- Coefficient4 y
+-5.31428564240093E-05, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5349,12 +6857,12 @@ ThermostatSetpoint:DualSetpoint,
 
   Curve:Biquadratic,
     Spd2Power,               !- Name
-0.183189657765182, !- Coefficient1 Constant
--0.00455677965507084, !- Coefficient2 x
-0.000130901374513485, !- Coefficient3 x**2
--0.00247903212716758, !- Coefficient4 y
--2.86958440304767E-05, !- Coefficient4 y
-2.87540475397391E-05, !- Coefficient6 x*y
+0.181742323097463, !- Coefficient1 Constant
+-0.00452077770360481, !- Coefficient2 x
+0.000129867156208278, !- Coefficient3 x**2
+-0.00245944592790387, !- Coefficient4 y
+-2.84691255006676E-05, !- Coefficient4 y
+2.85268691588785E-05, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5367,12 +6875,12 @@ ThermostatSetpoint:DualSetpoint,
 	
   Curve:Biquadratic,
     Spd3Cooling,             !- Name
-0.333364058097904, !- Coefficient1 Constant
--4.85494683944227E-05, !- Coefficient2 x
--3.52144375631488E-05, !- Coefficient3 x**2
-0.0137177267879995, !- Coefficient4 y
-0.000122021979443201, !- Coefficient4 y
--8.63528777420285E-05, !- Coefficient6 x*y
+0.314193722179958, !- Coefficient1 Constant
+-4.57575968799313E-05, !- Coefficient2 x
+-3.31894064272222E-05, !- Coefficient3 x**2
+0.0129288792077984, !- Coefficient4 y
+0.000115005019220657, !- Coefficient4 y
+-8.13870944382092E-05, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5385,12 +6893,12 @@ ThermostatSetpoint:DualSetpoint,
 
   Curve:Biquadratic,
     Spd3Power,               !- Name
-0.172655831898097, !- Coefficient1 Constant
--0.00109919177642625, !- Coefficient2 x
-0.000114800197945393, !- Coefficient3 x**2
--0.00352047121920086, !- Coefficient4 y
--6.12580159710315E-05, !- Coefficient4 y
-5.25348911840055E-05, !- Coefficient6 x*y
+0.171291722296395, !- Coefficient1 Constant
+-0.00109050734312417, !- Coefficient2 x
+0.000113893190921228, !- Coefficient3 x**2
+-0.00349265687583445, !- Coefficient4 y
+-6.07740320427236E-05, !- Coefficient4 y
+0.000052119826435247, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5403,12 +6911,12 @@ ThermostatSetpoint:DualSetpoint,
 	
   Curve:Biquadratic,
     Spd4Cooling,             !- Name
-0.532488643191061, !- Coefficient1 Constant
--0.00346405615785817, !- Coefficient2 x
--0.000013477208977043, !- Coefficient3 x**2
-0.0193416947070808, !- Coefficient4 y
-0.000173696343381974, !- Coefficient4 y
--0.000138591549732542, !- Coefficient6 x*y
+0.501867507185253, !- Coefficient1 Constant
+-0.00326485315869961, !- Coefficient2 x
+-1.27021925436566E-05, !- Coefficient3 x**2
+0.0182294368743896, !- Coefficient4 y
+0.000163707812316716, !- Coefficient4 y
+-0.000130621744652412, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5421,12 +6929,12 @@ ThermostatSetpoint:DualSetpoint,
 
   Curve:Biquadratic,
     Spd4Power,               !- Name
-0.213280535617373, !- Coefficient1 Constant
-0.000194302154360194, !- Coefficient2 x
-0.00012563160186995, !- Coefficient3 x**2
--0.00380910006657781, !- Coefficient4 y
--6.82281385325561E-05, !- Coefficient4 y
-6.25822299158685E-05, !- Coefficient6 x*y
+0.211595460614152, !- Coefficient1 Constant
+0.000192767022696929, !- Coefficient2 x
+0.000124639018691589, !- Coefficient3 x**2
+-0.00377900534045394, !- Coefficient4 y
+-0.000067689085447263, !- Coefficient4 y
+6.20877837116155E-05, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5439,12 +6947,12 @@ ThermostatSetpoint:DualSetpoint,
 	
   Curve:Biquadratic,
     Spd5Cooling,             !- Name
-0.541369435310582, !- Coefficient1 Constant
-0.000192917507466544, !- Coefficient2 x
--6.25688171120612E-05, !- Coefficient3 x**2
-0.0205714164248399, !- Coefficient4 y
-0.000171406905987018, !- Coefficient4 y
--0.000111196167079046, !- Coefficient6 x*y
+0.510237603073392, !- Coefficient1 Constant
+0.000181823649767282, !- Coefficient2 x
+-0.000058970753034996, !- Coefficient3 x**2
+0.0193884425751025, !- Coefficient4 y
+0.000161550030638261, !- Coefficient4 y
+-0.000104801752852581, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5457,12 +6965,12 @@ ThermostatSetpoint:DualSetpoint,
 
   Curve:Biquadratic,
     Spd5Power,               !- Name
-0.540359024936829, !- Coefficient1 Constant
--0.0103818373275222, !- Coefficient2 x
-0.000296350400793606, !- Coefficient3 x**2
-0.000328866649156043, !- Coefficient4 y
--0.000012738662271427, !- Coefficient4 y
--3.04209556726379E-05, !- Coefficient6 x*y
+0.280253671562083, !- Coefficient1 Constant
+0.000432351468624833, !- Coefficient2 x
+0.000142586782376502, !- Coefficient3 x**2
+-0.00410228638184246, !- Coefficient4 y
+-7.73848464619493E-05, !- Coefficient4 y
+7.08054072096128E-05, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5475,12 +6983,12 @@ ThermostatSetpoint:DualSetpoint,
 	
   Curve:Biquadratic,
     Spd6Cooling,             !- Name
-0.653872743882431, !- Coefficient1 Constant
-0.000044621580824907, !- Coefficient2 x
--7.17842952337741E-05, !- Coefficient3 x**2
-0.0251142967460137, !- Coefficient4 y
-0.000218091644168551, !- Coefficient4 y
--0.000141163709832506, !- Coefficient6 x*y
+0.616271329322815, !- Coefficient1 Constant
+4.20555852629258E-05, !- Coefficient2 x
+-6.76562885700793E-05, !- Coefficient3 x**2
+0.0236700813506556, !- Coefficient4 y
+0.000205550129934942, !- Coefficient4 y
+-0.000133045990866781, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5493,12 +7001,12 @@ ThermostatSetpoint:DualSetpoint,
 
   Curve:Biquadratic,
     Spd6Power,               !- Name
-0.529825199069744, !- Coefficient1 Constant
--0.00692424944887765, !- Coefficient2 x
-0.000280249224225514, !- Coefficient3 x**2
--0.000712572442877238, !- Coefficient4 y
--4.53008342119817E-05, !- Coefficient4 y
--6.64011202837153E-06, !- Coefficient6 x*y
+0.410342122830441, !- Coefficient1 Constant
+-0.0021736481975968, !- Coefficient2 x
+0.000202301401869159, !- Coefficient3 x**2
+-0.00226054739652871, !- Coefficient4 y
+-6.72701935914553E-05, !- Coefficient4 y
+3.50879506008011E-05, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5511,12 +7019,12 @@ ThermostatSetpoint:DualSetpoint,
 	
   Curve:Biquadratic,
     Spd7Cooling,             !- Name
-0.852997328975589, !- Coefficient1 Constant
--0.00337088510863885, !- Coefficient2 x
--5.00470666476683E-05, !- Coefficient3 x**2
-0.030738264665095, !- Coefficient4 y
-0.000269766008107324, !- Coefficient4 y
--0.00019340238182302, !- Coefficient6 x*y
+0.80394511432811, !- Coefficient1 Constant
+-0.00317703997655676, !- Coefficient2 x
+-4.71690746865137E-05, !- Coefficient3 x**2
+0.0289706390172468, !- Coefficient4 y
+0.000254252923031001, !- Coefficient4 y
+-0.000182280641080983, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5529,12 +7037,12 @@ ThermostatSetpoint:DualSetpoint,
 
   Curve:Biquadratic,
     Spd7Power,               !- Name
-0.57044990278902, !- Coefficient1 Constant
--0.00563075551809121, !- Coefficient2 x
-0.000291080628150071, !- Coefficient3 x**2
--0.00100120129025419, !- Coefficient4 y
--5.22709567735063E-05, !- Coefficient4 y
-3.40722670349147E-06, !- Coefficient6 x*y
+0.333513017356475, !- Coefficient1 Constant
+0.00597318090787717, !- Coefficient2 x
+0.000150953604806409, !- Coefficient3 x**2
+-0.00650090120160214, !- Coefficient4 y
+-0.000118277870493992, !- Coefficient4 y
+0.00013132476635514, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5547,12 +7055,12 @@ ThermostatSetpoint:DualSetpoint,
 	
   Curve:Biquadratic,
     Spd8Cooling,             !- Name
-0.943960125698794, !- Coefficient1 Constant
--0.00263965948420812, !- Coefficient2 x
--6.44892221097138E-05, !- Coefficient3 x**2
-0.0364251839061519, !- Coefficient4 y
-0.000332066297605523, !- Coefficient4 y
--0.00024359985737281, !- Coefficient6 x*y
+0.889677031096322, !- Coefficient1 Constant
+-0.00248786399878599, !- Coefficient2 x
+-6.07807237851368E-05, !- Coefficient3 x**2
+0.0343305279455239, !- Coefficient4 y
+0.000312970590322475, !- Coefficient4 y
+-0.000229591475299332, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5565,12 +7073,12 @@ ThermostatSetpoint:DualSetpoint,
 
   Curve:Biquadratic,
     Spd8Power,               !- Name
-0.639654884611422, !- Coefficient1 Constant
--0.00538926310230506, !- Coefficient2 x
-0.000309171321781881, !- Coefficient3 x**2
--0.0013270568330062, !- Coefficient4 y
--6.20439315643087E-05, !- Coefficient4 y
-1.21942744197652E-05, !- Coefficient6 x*y
+0.634601134846462, !- Coefficient1 Constant
+-0.00534668391188251, !- Coefficient2 x
+0.000306728638184246, !- Coefficient3 x**2
+-0.00131657209612817, !- Coefficient4 y
+-0.000061553738317757, !- Coefficient4 y
+1.20979305740988E-05, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5583,12 +7091,12 @@ ThermostatSetpoint:DualSetpoint,
 	
   Curve:Biquadratic,
     Spd9Cooling,             !- Name
-1.03183920561639, !- Coefficient1 Constant
--0.00178656819719317, !- Coefficient2 x
--8.62370502780069E-05, !- Coefficient3 x**2
-0.0400125606384254, !- Coefficient4 y
-0.00035349265365757, !- Coefficient4 y
--0.000260492856882235, !- Coefficient6 x*y
+0.972502562374656, !- Coefficient1 Constant
+-0.00168383032954202, !- Coefficient2 x
+-0.00008127792771442, !- Coefficient3 x**2
+0.0377116100417941, !- Coefficient4 y
+0.000333164808616903, !- Coefficient4 y
+-0.000245513030925139, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5601,12 +7109,12 @@ ThermostatSetpoint:DualSetpoint,
 
   Curve:Biquadratic,
     Spd9Power,               !- Name
-0.770779316504335, !- Coefficient1 Constant
--0.00801601607241707, !- Coefficient2 x
-0.000369361488398006, !- Coefficient3 x**2
-0.000529349141465083, !- Coefficient4 y
--5.18487290040016E-05, !- Coefficient4 y
--2.38076239872564E-05, !- Coefficient6 x*y
+0.76468958611482, !- Coefficient1 Constant
+-0.00795268357810414, !- Coefficient2 x
+0.000366443257676903, !- Coefficient3 x**2
+0.000525166889185581, !- Coefficient4 y
+-0.000051439085447263, !- Coefficient4 y
+-2.36195260347129E-05, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5619,12 +7127,12 @@ ThermostatSetpoint:DualSetpoint,
 	
   Curve:Biquadratic,
     Spd10Cooling,             !- Name
-0.985777870199267, !- Coefficient1 Constant
-0.00716176650791237, !- Coefficient2 x
--0.000203993595245927, !- Coefficient3 x**2
-0.0465651434339187, !- Coefficient4 y
-0.000425748742950601, !- Coefficient4 y
--0.0003094065728937, !- Coefficient6 x*y
+0.92909001662554, !- Coefficient1 Constant
+0.00674992406003139, !- Coefficient2 x
+-0.000192262799285838, !- Coefficient3 x**2
+0.0438873819296074, !- Coefficient4 y
+0.000401265760395207, !- Coefficient4 y
+-0.000291613929105296, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5637,12 +7145,12 @@ ThermostatSetpoint:DualSetpoint,
 
   Curve:Biquadratic,
     Spd10Power,               !- Name
-0.693338369903068, !- Coefficient1 Constant
-0.000195691636980157, !- Coefficient2 x
-0.000317604774768474, !- Coefficient3 x**2
--0.00374477341356642, !- Coefficient4 y
--0.000103262613870884, !- Coefficient4 y
-7.31955893643966E-05, !- Coefficient6 x*y
+0.687860480640854, !- Coefficient1 Constant
+0.000194145527369826, !- Coefficient2 x
+0.000315095460614152, !- Coefficient3 x**2
+-0.00371518691588785, !- Coefficient4 y
+-0.0001024467623498, !- Coefficient4 y
+7.26172897196262E-05, !- Coefficient6 x*y
     15,                      !- Minimum Value of x
     65,                      !- Maximum Value of x
     -30,                     !- Minimum Value of y
@@ -5662,9 +7170,9 @@ ZoneHVAC:TerminalUnit:VariableRefrigerantFlow,
     VRFAvailSched,           !- Terminal Unit Availability Schedule
     TU1 Inlet Node,          !- Terminal Unit Air Inlet Node Name
     TU1 Outlet Node,         !- Terminal Unit Air Outlet Node Name
-    0.967,                !- Cooling Supply Air Flow Rate {m3/s}
+    0.967,                !- Cooling Supply Air Flow Rate {m3/s}  yoshi
     0,                !- No Cooling Supply Air Flow Rate {m3/s}
-    0.967,                !- Heating Supply Air Flow Rate {m3/s}
+    0.967,                !- Heating Supply Air Flow Rate {m3/s}  yoshi
     0,                !- No Heating Supply Air Flow Rate {m3/s}
     0,                !- Cooling Outdoor Air Flow Rate {m3/s}
     0,                !- Heating Outdoor Air Flow Rate {m3/s}
@@ -5687,9 +7195,9 @@ ZoneHVAC:TerminalUnit:VariableRefrigerantFlow,
     VRFAvailSched,           !- Terminal Unit Availability Schedule
     TU2 Inlet Node,          !- Terminal Unit Air Inlet Node Name
     TU2 Outlet Node,         !- Terminal Unit Air Outlet Node Name
-    1.4505,                !- Cooling Supply Air Flow Rate {m3/s}
+    1.45,                !- Cooling Supply Air Flow Rate {m3/s}
     0,                !- No Cooling Supply Air Flow Rate {m3/s}
-    1.4505,                !- Heating Supply Air Flow Rate {m3/s}
+    1.45,                !- Heating Supply Air Flow Rate {m3/s}
     0,                !- No Heating Supply Air Flow Rate {m3/s}
     0,                !- Cooling Outdoor Air Flow Rate {m3/s}
     0,                !- Heating Outdoor Air Flow Rate {m3/s}
@@ -5718,7 +7226,7 @@ ZoneHVAC:TerminalUnit:VariableRefrigerantFlow,
     TU1 VRF Supply Fan,      !- Name
     VRFAvailSched,           !- Availability Schedule Name
     0.7,                     !- Fan Total Efficiency
-    200,                     !- Pressure Rise {Pa}
+    720,                     !- Pressure Rise {Pa}
     0.967,                !- Maximum Flow Rate {m3/s}
     Fraction,                !- Fan Power Minimum Flow Rate Input Method
     0,                       !- Fan Power Minimum Flow Fraction
@@ -5738,8 +7246,8 @@ ZoneHVAC:TerminalUnit:VariableRefrigerantFlow,
     TU2 VRF Supply Fan,      !- Name
     VRFAvailSched,           !- Availability Schedule Name
     0.7,                     !- Fan Total Efficiency
-    200,                     !- Pressure Rise {Pa}
-    1.4505,                !- Maximum Flow Rate {m3/s}
+    720,                     !- Pressure Rise {Pa}
+    1.45,                !- Maximum Flow Rate {m3/s}
     Fraction,                !- Fan Power Minimum Flow Rate Input Method
     0,                       !- Fan Power Minimum Flow Fraction
     0,                       !- Fan Power Minimum Air Flow Rate {m3/s}
@@ -5764,7 +7272,8 @@ ZoneHVAC:TerminalUnit:VariableRefrigerantFlow,
     TU1 VRF DX CCoil Outlet Node,  !- Coil Air Outlet Node
     22400,                !- Rated Total Cooling Capacity {W}
     0.7,                !- Rated Sensible Heat Ratio
-    3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}    
+    3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}  
+    0.303,                  !- Coil Rated Bypass Factor {-}  Yoshi original 0.299
     IUEvapTempCurve,         !- Indoor Unit Evaporating Temperature Function of Superheating Curve Name    
     ;                        !- Name of Water Storage Tank for Condensate Collection
 
@@ -5775,15 +7284,16 @@ ZoneHVAC:TerminalUnit:VariableRefrigerantFlow,
     TU2 VRF DX CCoil Outlet Node,  !- Coil Air Outlet Node
     33600,                !- Rated Total Cooling Capacity {W}
     0.7,                !- Rated Sensible Heat Ratio
-    3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}    
-    IUEvapTempCurve,         !- Indoor Unit Evaporating Temperature Function of Superheating Curve Name    
+    3,                       !- Indoor Unit Reference Superheating Degrees Setpoint {C}     
+    0.303,                  !- Coil Rated Bypass Factor {-}  Yoshi original 0.299
+    IUEvapTempCurve,         !- Indoor Unit Evaporating Temperature Function of Superheating Curve Name 
     ;                        !- Name of Water Storage Tank for Condensate Collection
 
   Curve:Quadratic,
     IUEvapTempCurve,         !- Name
-    0.453,                       !- Coefficient1 Constant
-    -0.07,                   !- Coefficient2 x
-    0.037,                       !- Coefficient3 x**2
+    0.52,                       !- Coefficient1 Constant
+    -0.03,                   !- Coefficient2 x
+    0.035,                       !- Coefficient3 x**2
     0,                       !- Minimum Value of x    
     15,                      !- Maximum Value of x    
     ,                        !- Minimum Curve Output
@@ -5801,6 +7311,7 @@ ZoneHVAC:TerminalUnit:VariableRefrigerantFlow,
     TU1 VRF DX HCoil Outlet Node,  !- Coil Air Outlet Node
     25000,                    !- Rated Total Heating Capacity {W}
     5,                       !- Indoor Unit Reference Subcooling Degrees Setpoint {C}    
+    0.136,                   !- Coil Rated Bypass Factor {-}
     IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
 
   Coil:Heating:DX:VariableRefrigerantFlow:FluidTemperatureControl,
@@ -5808,15 +7319,16 @@ ZoneHVAC:TerminalUnit:VariableRefrigerantFlow,
     VRFAvailSched,           !- Availability Schedule
     TU2 VRF DX CCoil Outlet Node,  !- Coil Air Inlet Node
     TU2 VRF DX HCoil Outlet Node,  !- Coil Air Outlet Node
-    25000,                    !- Rated Total Heating Capacity {W}
+    37500,                    !- Rated Total Heating Capacity {W}
     5,                       !- Indoor Unit Reference Subcooling Degrees Setpoint {C}    
+    0.136,                   !- Coil Rated Bypass Factor {-}
     IUCondTempCurve;         !- Indoor Unit Condensing Temperature Function of Subcooling Curve Name
 
   Curve:Quadratic,
     IUCondTempCurve,         !- Name
-    6.193,                   !- Coefficient1 Constant
-    0.003,                   !- Coefficient2 x
-    0.016,                   !- Coefficient3 x**2
+    5.509,                   !- Coefficient1 Constant
+    -0.53,                   !- Coefficient2 x
+    0.04,                   !- Coefficient3 x**2
     0,                       !- Minimum Value of x    
     20,                      !- Maximum Value of x    
     ,                        !- Minimum Curve Output
@@ -5941,5 +7453,33 @@ Output:Variable,*,VRF Heat Pump Terminal Unit Heating Load Rate,Timestep; !- HVA
 Output:Variable,*,VRF Heat Pump Heat Recovery Status Change Multiplier,Timestep; !- HVAC Average []
 
 	
+Output:Variable,*,VRF Heat Pump Compressor Electric Power,Timestep; ! [W]", VRF( NumCond ).Ncomp,  
+Output:Variable,*,VRF Heat Pump Outdoor Unit Fan Power,Timestep; ! [W]", VRF( NumCond ).CondFanPower 
+Output:Variable,*,VRF Heat Pump Compressor Rotating Speed,Timestep; ! [rev/min]", VRF( NumCond ).CompActSpeed 
+Output:Variable,*,VRF Heat Pump Indoor Unit Evaporating Temperature,Timestep; ! [C]", VRF( NumCond ).IUEvaporatingTemp 
+Output:Variable,*,VRF Heat Pump Outdoor Unit Condensing Temperature,Timestep; ! [C]", VRF( NumCond ).CondensingTemp 
+Output:Variable,*,VRF Heat Pump Indoor Unit Condensing Temperature,Timestep; ! [C]", VRF( NumCond ).IUCondensingTemp 
+Output:Variable,*,VRF Heat Pump Outdoor Unit Evaporating Temperature,Timestep; ! [C]", VRF( NumCond ).EvaporatingTemp 
+Output:Variable,*,VRF Heat Pump Indoor Unit Cooling Rate Including Piping Loss,Timestep; ! [W]", VRF( NumCond ).CoolingCapacity 
+Output:Variable,*,VRF Heat Pump Indoor Unit Heating Rate Including Piping Loss,Timestep; ! [W]", VRF( NumCond ).HeatingCapacity 
+Output:Variable,*,VRF Heat Pump Indoor Unit Piping Loss Ratio out of Cooling Capacity,Timestep; ! [-]", VRF( NumCond ).CoolingCapacity * VRF( VRFCond ).PipingCorrectionHeating 
+Output:Variable,*,VRF Heat Pump Indoor Unit Piping Loss Ratio out of Heating Capacity,Timestep; ! [-]", VRF( NumCond ).HeatingCapacity * VRF( VRFCond ).PipingCorrectionHeating 
+Output:Variable,*,VRF Heat Pump Outdoor Unit Evaporator Heat Extract Rate,Timestep; ! [W]", VRF( NumCond ).OUCondensingCap 
+Output:Variable,*,VRF Heat Pump Outdoor Unit Condenser Heat Release Rate,Timestep; ! [W]", VRF( NumCond ).OUEvaporatingCap 
+Output:Variable,*,VRF Heat Pump/Recovery Operational Mode,Timestep; ! [-]", VRF( NumCond ).VRFOperationSimPath 
+Output:Variable,*,VRF Heat Pump Cycling Ration,Timestep; ! [-]", VRF( NumCond ).VRFCondCyclingRatio 
 	
-	
+!Output:Variable,*,Fan Electric Power,hourly; !- HVAC Average [W]
+Output:Variable,*,Fan Electric Power,Timestep; !- HVAC Average [W]
+Output:Variable,*,System Node Mass Flow Rate,Timestep; !- HVAC Average [kg/s]
+
+
+
+  Output:Variable,*,Zone Air Temperature,timestep;
+  Output:Variable,*,Zone Air Relative Humidity,timestep;
+  Output:Variable,*,Zone Air System Sensible Cooling Rate,timestep;
+  Output:Variable,*,Zone Air System Sensible Heating Rate,timestep;
+  Output:Variable,*,Zone Predicted Sensible Load to Setpoint Heat Transfer Rate,timestep;
+  Output:Variable,*,Zone Predicted Sensible Load to Heating Setpoint Heat Transfer Rate,timestep;
+  Output:Variable,*,Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate,timestep;
+  Output:Variable,*,Fan Electric Power,timestep;
