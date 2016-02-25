@@ -7386,7 +7386,7 @@ NodeList,
 
 NodeList,
     Zone2 Out Nodes,      !- Name
-    TU2 Inlet Node;          !- Node 1 Name
+    TU2 Inlet Node;          !- Node 1 Name 
 
 	
 !-   ===========  ALL OBJECTS IN CLASS: OUTPUT:VARIABLEDICTIONARY ===========
@@ -7406,6 +7406,7 @@ Output:Table:SummaryReports,
 OutputControl:Table:Style,
     CommaAndHTML;            !- Column Separator
 
+!- Output: Coil related_only for VRF-FluidTCtrl Model
 Output:Variable,*,Cooling Coil VRF Evaporating Temperature,Timestep; !- HVAC Average [C]
 Output:Variable,*,Cooling Coil VRF Super Heating Degrees,Timestep; !- HVAC Average [C]
 Output:Variable,*,Heating Coil Total Heating Rate,Timestep; !- HVAC Average [W]
@@ -7415,6 +7416,8 @@ Output:Variable,*,Cooling Coil Latent Cooling Rate,Timestep; !- HVAC Average [W]
 Output:Variable,*,Heating Coil Total Heating Rate,Timestep; !- HVAC Average [W]
 Output:Variable,*,Heating Coil VRF Condensing Temperature,Timestep; !- HVAC Average [C]
 Output:Variable,*,Heating Coil VRF Subcooling Degrees,Timestep; !- HVAC Average [C]
+
+!- Output: VRF TU related_for both VRF-SysCurve and VRF-FluidTCtrl Model
 Output:Variable,*,Zone VRF Air Terminal Cooling Electric Power,Timestep; !- HVAC Average [W]
 Output:Variable,*,Zone VRF Air Terminal Total Cooling Rate,Timestep; !- HVAC Average [W]
 Output:Variable,*,Zone VRF Air Terminal Sensible Cooling Rate,Timestep; !- HVAC Average [W]
@@ -7423,22 +7426,15 @@ Output:Variable,*,Zone VRF Air Terminal Heating Electric Power,Timestep; !- HVAC
 Output:Variable,*,Zone VRF Air Terminal Total Heating Rate,Timestep; !- HVAC Average [W]
 Output:Variable,*,Zone VRF Air Terminal Sensible Heating Rate,Timestep; !- HVAC Average [W]
 Output:Variable,*,Zone VRF Air Terminal Latent Heating Rate,Timestep; !- HVAC Average [W]
+
+!- Output: VRF Overall or OU related_for both VRF-SysCurve and VRF-FluidTCtrl Model
 Output:Variable,*,VRF Heat Pump Total Cooling Rate,Timestep; !- HVAC Average [W]
 Output:Variable,*,VRF Heat Pump Total Heating Rate,Timestep; !- HVAC Average [W]
-Output:Variable,*,VRF Heat Pump Cooling Electric Power,Timestep; !- HVAC Average [W]
 Output:Variable,*,VRF Heat Pump Heating Electric Power,Timestep; !- HVAC Average [W]
+Output:Variable,*,VRF Heat Pump Cooling Electric Power,Timestep; !- HVAC Average [W]
 Output:Variable,*,VRF Heat Pump Cooling COP,Timestep; !- HVAC Average []
 Output:Variable,*,VRF Heat Pump Heating COP,Timestep; !- HVAC Average []
 Output:Variable,*,VRF Heat Pump COP,Timestep; !- HVAC Average []
-Output:Variable,*,VRF Heat Pump Indoor Unit Evaporating Temperature at Cooling Mode,Timestep; !- HVAC Average [C]
-Output:Variable,*,VRF Heat Pump Outdoor Unit Condensing Temperature at Cooling Mode,Timestep; !- HVAC Average [C]
-Output:Variable,*,VRF Heat Pump Indoor Unit Condensing Temperature at Heating Mode,Timestep; !- HVAC Average [C]
-Output:Variable,*,VRF Heat Pump Outdoor Unit Evaporating Temperature at Heating Mode,Timestep; !- HVAC Average [C]
-Output:Variable,*,VRF Heat Pump Compressor Electric Power,Timestep; !- HVAC Average [W]
-Output:Variable,*,VRF Heat Pump Compressor Electric Power at Cooling Mode,Timestep; !- HVAC Average [W]
-Output:Variable,*,VRF Heat Pump Compressor Electric Power at Heating Mode,Timestep; !- HVAC Average [W]
-Output:Variable,*,VRF Heat Pump Compressor Rotating Speed,Timestep; !- HVAC Average [rev/min]
-Output:Variable,*,VRF Heat Pump Outdoor Unit Fan Power,Timestep; !- HVAC Average [W]
 Output:Variable,*,VRF Heat Pump Maximum Capacity Cooling Rate,Timestep; !- HVAC Average [W]
 Output:Variable,*,VRF Heat Pump Maximum Capacity Heating Rate,Timestep; !- HVAC Average [W]
 Output:Variable,*,VRF Heat Pump Defrost Electric Power,Timestep; !- HVAC Average [W]
@@ -7452,7 +7448,7 @@ Output:Variable,*,VRF Heat Pump Terminal Unit Cooling Load Rate,Timestep; !- HVA
 Output:Variable,*,VRF Heat Pump Terminal Unit Heating Load Rate,Timestep; !- HVAC Average [W]
 Output:Variable,*,VRF Heat Pump Heat Recovery Status Change Multiplier,Timestep; !- HVAC Average []
 
-	
+!- Output: VRF Overall or OU related_only for VRF-FluidTCtrl Model
 Output:Variable,*,VRF Heat Pump Compressor Electric Power,Timestep; ! [W]", VRF( NumCond ).Ncomp,  
 Output:Variable,*,VRF Heat Pump Outdoor Unit Fan Power,Timestep; ! [W]", VRF( NumCond ).CondFanPower 
 Output:Variable,*,VRF Heat Pump Compressor Rotating Speed,Timestep; ! [rev/min]", VRF( NumCond ).CompActSpeed 
@@ -7460,26 +7456,20 @@ Output:Variable,*,VRF Heat Pump Indoor Unit Evaporating Temperature,Timestep; ! 
 Output:Variable,*,VRF Heat Pump Outdoor Unit Condensing Temperature,Timestep; ! [C]", VRF( NumCond ).CondensingTemp 
 Output:Variable,*,VRF Heat Pump Indoor Unit Condensing Temperature,Timestep; ! [C]", VRF( NumCond ).IUCondensingTemp 
 Output:Variable,*,VRF Heat Pump Outdoor Unit Evaporating Temperature,Timestep; ! [C]", VRF( NumCond ).EvaporatingTemp 
-Output:Variable,*,VRF Heat Pump Indoor Unit Cooling Rate Including Piping Loss,Timestep; ! [W]", VRF( NumCond ).CoolingCapacity 
-Output:Variable,*,VRF Heat Pump Indoor Unit Heating Rate Including Piping Loss,Timestep; ! [W]", VRF( NumCond ).HeatingCapacity 
-Output:Variable,*,VRF Heat Pump Indoor Unit Piping Loss Ratio out of Cooling Capacity,Timestep; ! [-]", VRF( NumCond ).CoolingCapacity * VRF( VRFCond ).PipingCorrectionHeating 
-Output:Variable,*,VRF Heat Pump Indoor Unit Piping Loss Ratio out of Heating Capacity,Timestep; ! [-]", VRF( NumCond ).HeatingCapacity * VRF( VRFCond ).PipingCorrectionHeating 
-Output:Variable,*,VRF Heat Pump Outdoor Unit Evaporator Heat Extract Rate,Timestep; ! [W]", VRF( NumCond ).OUCondensingCap 
-Output:Variable,*,VRF Heat Pump Outdoor Unit Condenser Heat Release Rate,Timestep; ! [W]", VRF( NumCond ).OUEvaporatingCap 
+Output:Variable,*,VRF Heat Pump Cooling Capacity at Max Compressor Speed,Timestep; ! [W]", VRF( NumCond ).CoolingCapacity 
+Output:Variable,*,VRF Heat Pump Heating Capacity at Max Compressor Speed,Timestep; ! [W]", VRF( NumCond ).HeatingCapacity 
+Output:Variable,*,VRF Heat Pump Outdoor Unit Evaporator Heat Extract Rate,Timestep; ! [W]", VRF( NumCond ).OUCondHeatRate 
+Output:Variable,*,VRF Heat Pump Outdoor Unit Condenser Heat Release Rate,Timestep; ! [W]", VRF( NumCond ).OUEvapHeatRate 
 Output:Variable,*,VRF Heat Pump/Recovery Operational Mode,Timestep; ! [-]", VRF( NumCond ).VRFOperationSimPath 
-Output:Variable,*,VRF Heat Pump Cycling Ration,Timestep; ! [-]", VRF( NumCond ).VRFCondCyclingRatio 
-	
-!Output:Variable,*,Fan Electric Power,hourly; !- HVAC Average [W]
-Output:Variable,*,Fan Electric Power,Timestep; !- HVAC Average [W]
+Output:Variable,*,VRF Heat Pump Cycling Ration,Timestep; ! [-]", VRF( NumCond ).VRFCondCyclingRatio
+
+!- Output: Zone related or other general system outputs
+Output:Variable,*,Zone Air Temperature,timestep;
+Output:Variable,*,Zone Air Relative Humidity,timestep;
+Output:Variable,*,Zone Air System Sensible Cooling Rate,timestep;
+Output:Variable,*,Zone Air System Sensible Heating Rate,timestep;
+Output:Variable,*,Zone Predicted Sensible Load to Setpoint Heat Transfer Rate,timestep;
+Output:Variable,*,Zone Predicted Sensible Load to Heating Setpoint Heat Transfer Rate,timestep;
+Output:Variable,*,Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate,timestep;
+Output:Variable,*,Fan Electric Power,timestep;
 Output:Variable,*,System Node Mass Flow Rate,Timestep; !- HVAC Average [kg/s]
-
-
-
-  Output:Variable,*,Zone Air Temperature,timestep;
-  Output:Variable,*,Zone Air Relative Humidity,timestep;
-  Output:Variable,*,Zone Air System Sensible Cooling Rate,timestep;
-  Output:Variable,*,Zone Air System Sensible Heating Rate,timestep;
-  Output:Variable,*,Zone Predicted Sensible Load to Setpoint Heat Transfer Rate,timestep;
-  Output:Variable,*,Zone Predicted Sensible Load to Heating Setpoint Heat Transfer Rate,timestep;
-  Output:Variable,*,Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate,timestep;
-  Output:Variable,*,Fan Electric Power,timestep;
