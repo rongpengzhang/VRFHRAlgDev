@@ -277,7 +277,7 @@ To be developed.
 We propose to create a new IDD object named "AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR", which is an extension of the existing "AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl" object designed for the VRF-FluidTCtrl-HP model.
 
 ```
-AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl,
+AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \memo This is a key object in the new physics based VRF model applicable for Fluid
        \memo Temperature Control
        \memo It describes the Variable Refrigerant Flow system excluding the performance of indoor units
