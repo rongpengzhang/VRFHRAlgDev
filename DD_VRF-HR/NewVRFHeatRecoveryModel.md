@@ -276,6 +276,7 @@ To be developed.
 
 We propose to create a new IDD object named "AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR", which is an extension of the existing "AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl" object designed for the VRF-FluidTCtrl-HP model.
 
+```
 AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl,
        \memo This is a key object in the new physics based VRF model applicable for Fluid
        \memo Temperature Control
@@ -776,7 +777,7 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl,
        \note Efficiency of the compressor inverter
 	   
 	(Tianzhen, I will further clean up the order and numbering of these fields soon. Rongpeng)
-	   
+``` 
 	   
 	   
 ## IDD Objects (Revised) ##
