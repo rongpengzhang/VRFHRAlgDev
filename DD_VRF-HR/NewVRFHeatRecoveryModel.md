@@ -80,13 +80,12 @@ Depending on the indoor cooling/heating requirements and the outdoor unit operat
 
 The heat balance diagram for all the six operational modes are shown Figure 2.
 
-![](VRF-HR-Chart-HeatBalance.PNG.png)
+![](VRF-HR-Chart-HeatBalance.PNG)
 Figure 2. Heat Balance Diagram for All Six VRF-HR Operational Modes
 
 With the help of FWV and BS units, every operational mode has its own refrigerant piping connections for different refrigerant flow directions, as shown in Table 1. This leads to different refrigerant operations (HP charts shown in Table 2) and piping loss situations. The operational control logics for various modes are also different. Therefore, we need to design particular algorithm for different operational modes.
 
 ![](VRF-HR-Chart-Piping.PNG) 
-
 ![](VRF-HR-Chart-EnthalpyPressure.PNG)
 
 The implementation of the proposed VRF HR algorithm will go to the method “HVACVariableRefrigerantFlow::CalcVRFCondenser_FluidTCtrl”, which was newly added in V8.4 specifically for the VRF-FluidTCtrl-HP model. Therefore, the implementation of the new VRF-HR feature is expected to generate no or little impacts on other parts of the codes. 
@@ -159,60 +158,97 @@ As noted earlier, simultaneous heating and cooling operations include the follow
 -	Mode 5: Heating dominant w/o HR loss
 
 This section determines the operational mode based on the load requirements and operational conditions:
+
 a. Calculate the Loading Index LI_1 satisfying I/U cooling load (Refer to Engineering Reference V8.4+: Step 2c.4 in the VRF-FluidTCtrl-HP model for more details.)
+
 b. Calculate the Loading Index LI_2 satisfying I/U heating load (Refer to Engineering Reference V8.4+: Step 2h.4 in the VRF-FluidTCtrl-HP model for more details.)
+
 c. If LI_1 <= LI_2, the system operates at Mode 5
+
 d. If LI_1 > LI_2 and Te' < To - 5, the system operates at Mode 2
+
 e. If LI_1 > LI_2 and Te' >= To - 5, the system operates at Mode 3 or 4 (these two modes can be handled by one set of algorithms)
 
+
 ##### Step 7-A: O/U operation analysis at Mode 5
+
 If Te' < To - 5, perform the following procedures:
+
 a. Select the compressor speed corresponding to LI_2
+
 b. Calculate the compressor power corresponding to LI_2 and the previously obtained Tc and Te'
 (Refer to Engineering Reference V8.4+: Step 2c.6 in the VRF-FluidTCtrl-HP model for more details.)
+
 c. Calculate the evaporative capacity (Cap_tot_evap) provided by the compressor at LI_2 and the previously obtained Tc and Te'
 (Refer to Engineering Reference V8.4+: Step 2c.4 in the VRF-FluidTCtrl-HP model for more details.)
+
 d. Calculate the O/U evaporator load (Cap_ou_evap) based on system-level heat balance
+
 e. Obtain the O/U fan flow rate (m_air_evap) corresponding to Cap_ou_evap, and thus the fan power
 (Refer to Engineering Reference V8.4+: Step 2c.3 in the VRF-FluidTCtrl-HP model for more details.)
 
 If Te' >= To - 5, perform the following procedures:
+
 a. Select the compressor speed corresponding to LI_1
+
 b. Perform iterations between step b-i to identify the compressor Loading Index and power consumption.
+
 c. Initialized compressor power (Ncomp_ini)
+
 c.1 For the 1st iteration step, calculate Ncomp = f_pow_comp(Tc, Tout – 5, LI_2)
+
 c.2 For the following iteration steps, update Ncomp = (Ncomp_ini + Ncomp_new)/2
+
 d. Calculate the O/U evaporator load (Cap_ou_evap) based on system-level heat balance
+
 e. Obtain the O/U evaporating temperature Te' level using Cap_ou_evap and the rated air flow rate
 (Refer to Engineering Reference V8.4+: Step 2c.3 in the VRF-FluidTCtrl-HP model for more details.)
+
 f. Update Te level and I/U evaporator side piping loss, corresponding to Te' update
+
 g. Identify the compressor Loading Index LI_new to provide sufficient evaporative capacity (Cap_tot_evap) at updated Te' level
 (Refer to Engineering Reference V8.4+: Step 2c.4 in the VRF-FluidTCtrl-HP model for more details.)
+
 h. Calculate the compressor power (Ncomp_new) corresponding to LI_new and the updated Te'
 (Refer to Engineering Reference V8.4+: Step 2c.6 in the VRF-FluidTCtrl-HP model for more details.)
+
 i. Compare Ncomp_new and Ncomp_ini. Start a new round of iteration if the difference is greater than the tolerance.
 
 ##### Step 7-B: O/U operation analysis at Mode 2
+
 a. Select the compressor speed corresponding to LI_1
+
 b. Calculate the compressor power corresponding to LI_1 and the previously obtained Tc and Te'
 (Refer to Engineering Reference V8.4+: Step 2c.6 in the VRF-FluidTCtrl-HP model for more details.)
+
 c. Calculate the evaporative capacity (Cap_tot_evap) provided by the compressor at LI_1 and the previously obtained Tc and Te'
 (Refer to Engineering Reference V8.4+: Step 2c.4 in the VRF-FluidTCtrl-HP model for more details.)
+
 d. Calculate the O/U condenser load (Cap_ou_cond) based on system-level heat balance
+
 e. Obtain the O/U fan flow rate (m_air_cond) corresponding to Cap_ou_cond, and thus the fan power
 
 ##### Step 7-C: O/U operation analysis at Mode 3 or 4
+
 a. Select the compressor speed corresponding to LI_1
+
 b. Perform iterations between step b-e to identify the updated Te' level within the range of To-5 and the original Te'.
+
 c. Calculate the evaporative capacity (Cap_tot_evap) provided by the compressor at LI_1 and the previously obtained Tc and assumed Te'
 (Refer to Engineering Reference V8.4+: Step 2c.4 in the VRF-FluidTCtrl-HP model for more details.)
+
 d. Calculate the O/U evaporator load (Cap_tot_evap) at assumed Te' level and rated fan flow rate
 (Refer to Engineering Reference V8.4+: Step 2h.3 in the VRF-FluidTCtrl-HP model for more details.)
+
 e. Perform iterations to identify the updated Te' level to ensure the heat balance for the b. and c. calculations
+
 f. Update Te level and I/U evaporator side piping loss, corresponding to Te' update
+
 g. Calculate the compressor power corresponding to LI_1 and the updated Te'
 (Refer to Engineering Reference V8.4+: Step 2c.6 in the VRF-FluidTCtrl-HP model for more details.)
+
 h. Calculate the O/U condenser load (Cap_ou_cond) based on system-level heat balance
+
 i. Obtain the O/U fan flow rate (m_air_cond) corresponding to Cap_ou_cond, and thus the fan power
 
 ##### Step 8: Modify I/U operational parameters for capacity adjustments
