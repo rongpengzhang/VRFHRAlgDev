@@ -16,6 +16,7 @@ The proposed model is developed for the 3-pipe VRF-HR systems, the dominant syst
 
 The proposed new VRF-HR model inherits many key features of the recently implemented VRF-HP model. Compared with the existing system curve based VRF-HR model, the new model is more physics-based by simulating the refrigerant loop performance. It is able to consider the dynamics of more operational parameters, which is essential for the representation of the complex control logics (e.g., the adjustment of superheating degrees during low load operations). Furthermore, the proposed model implements component-level curves rather than the system-level curves, and thus requires much fewer curves as model inputs. These features considerably extend the modeling capabilities of the new VRF-HR model, including:
 
+-	Allowing the modeling of multiple OUs or a single OU with multiple compressors, by introducing compressor power/capacity curves under a range of Load Indices.
 -	Allowing more accurate estimations of HR loss, a critical parameter in the VRF-HR operations.
 -	Allowing variable evaporating and condensing temperatures in the indoor and outdoor units under a variety of operational conditions.
 -	Allowing implementation of various control logics for different VRF-HR operational modes.
@@ -78,17 +79,24 @@ Depending on the indoor cooling/heating requirements and the outdoor unit operat
 -	Mode 5: Simultaneous heating and cooling. The sum of cooling loads and compressor heat is much smaller than the heating loads. Both OU heat exchangers perform as evaporators.
 -	Mode 6: Heating load only. No cooling load. Both OU heat exchangers perform as evaporators.
 
-The system-level heat balance diagram for all the six operational modes are shown Figure 2.
+The system-level heat balance diagram for all the six operational modes are shown Figure 2. Note that the heat recovery loss (HR loss) only exists in Mode 3 and Mode 4, in which the OU evaporator and condenser run simultaneously. In these modes, the following two items are at similar levels: (a) sum of IU heating load and IU condenser side piping loss, and (b) sum of IU cooling load, IU evaporator side piping loss and heat released by compressor. Take Mode 3 for example, item (b) is higher than item (a), and therefore the system requires the operation of OU condenser to release the extra heat to ensure the system-level heat balance. However, the extra heat is at a very low level that the OU condenser can not exactly meet it because of its control limitations. To ensure stable OU condenser operation as well as system-level heat balance, the system needs to release more heat than the required via OU condenser, and meanwhile runs OU evaporator to balance the amount of heat released more than required. Theoretically, the operation of OU evaporators is not needed, but in reality it cannot be avoided. This part of energy is called HR loss which results in a lower system energy efficiency than the theoretical case. 
 
 ![](VRF-HR-Chart-HeatBalance.PNG)
 Figure 2. System-level Heat Balance Diagram for All VRF-HR Operational Modes
 
-With the help of FWV and BS units, every operational mode has its own refrigerant piping connections to achieve different refrigerant flow directions, as shown in Table 1. This leads to different refrigerant operations (HP charts shown in Table 2) and piping loss situations. The operational control logics for various modes are also different, and therefore particular algorithm needs to be designed for different operational modes in the new VRF-HR model.
+With the help of FWV and BS units, every operational mode has its own refrigerant piping connections to achieve different refrigerant flow directions, as shown in Table 1. This leads to different refrigerant operations (as shown in the Pressure-Enthalpy Diagrams in Table 2) and piping loss situations. The operational control logics for various modes are also different, and therefore particular algorithm needs to be designed for different operational modes in the new VRF-HR model.
 
 ![](VRF-HR-Chart-Piping.PNG) 
+
 ![](VRF-HR-Chart-EnthalpyPressure.PNG)
 
-The implementation of the proposed VRF HR algorithm will go to the method “HVACVariableRefrigerantFlow::CalcVRFCondenser_FluidTCtrl”, which was newly added in V8.4 particularly for the VRF-FluidTCtrl-HP model. Therefore, the implementation of the new VRF-HR feature is expected to generate no or little impacts on other parts of the codes. 
+##### Implementation of the proposed model
+
+Figure 3 shows the coding hierarchy of the existing VRF models in EnergyPlus (V8.4+), including the VRF-SystemCurve model (both HP and HR) and the VRF-FluidTCtrl model (HP only). Both the indoor unit and outdoor unit parts are described by the "HVACVariableRefrigerantFlow.cc" file, and it refers to "DXCoil.cc" file for coil performance simulations. 
+
+Similarly to the VRF-FluidTCtrl-HP model, the VRF-FluidTCtrl-HR model implements a set of power/capacity curves to describe the compressor performance under a range of Load Indices (LI). LI indicates the particular operational state of compressor(s) at a given load condition. For the system with a single compressor, it corresponds to the compressor speed; for the system with multiple OUs or a single OU with multiple compressors, it is related with the load sharing strategies between compressors.
+ 
+The implementation of the VRF-FluidTCtrl-HR model will present additions to the existing VRF-FluidTCtrl-HP model, without changing the coding hierarchy of the key methods. Therefore, the implementation is expected to generate no or little impacts on the existing features of EnergyPlus. More specifically, the proposed algorithm will go to the method “HVACVariableRefrigerantFlow::CalcVRFCondenser_FluidTCtrl”, which was newly added in V8.4 particularly to describe the outdoor unit part of the VRF-FluidTCtrl-HP model. The indoor unit part of the current VRF-FluidTCtrl-HP model is able to handle the indoor unit performance of the HR systems, and thus will not be modified.
 
 ![](VRF-CodingHierarchy.PNG)
 Figure 3. Coding Hierarchy of the VRF model in the current EnergyPlus V8.4
@@ -278,10 +286,9 @@ We propose to create a new IDD object named "AirConditioner:VariableRefrigerantF
 
 ```
 AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
-       \memo This is a key object in the new physics based VRF model applicable for Fluid
-       \memo Temperature Control
-       \memo It describes the Variable Refrigerant Flow system excluding the performance of indoor units
-       \memo Indoor units are modeled separately, see ZoneHVAC:TerminalUnit:VariableRefrigerantFlow
+       \memo This is a key object in the new physics based VRF Heat Recovery (HR) model applicable for Fluid
+       \memo Temperature Control. It describes the VRF HR system excluding the performance of indoor units.
+       \memo Indoor units are modeled separately in the ZoneHVAC:TerminalUnit:VariableRefrigerantFlow object
        \min-fields 9
   A1 , \field Heat Pump Name
        \required-field
@@ -347,68 +354,84 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \default 16.0
        \note Enter the maximum outdoor temperature allowed for heating operation
        \note Heating is disabled below this temperature
-  N7 , \field Reference Outdoor Unit Superheating
-       \type real
-       \units deltaC
-       \default 3
-  N8 , \field Reference Outdoor Unit Subcooling
-       \type real
-       \units deltaC
-       \default 5
   A5 , \field Refrigerant Temperature Control Algorithm for Indoor Unit
        \type choice
        \key ConstantTemp
        \key VariableTemp
        \default VariableTemp
-  N9 , \field Reference Evaporating Temperature for Indoor Unit
+  N7 , \field Reference Evaporating Temperature for Indoor Unit
        \note This field is used if Refrigerant Temperature Control Algorithm
        \note is ConstantTemp
        \note Evaporating temperature is the refrigerant temperature, not air temperature
        \type real
        \units C
        \default 6.0
-  N10, \field Reference Condensing Temperature for Indoor Unit
+  N8,  \field Reference Condensing Temperature for Indoor Unit
        \note This field is used if Refrigerant Temperature Control Algorithm
        \note is ConstantTemp
        \note Condensing temperature is the refrigerant temperature, not air temperature
        \type real
        \units C
        \default 44.0
-  N11, \field Variable Evaporating Temperature Minimum for Indoor Unit
+  N9,  \field Variable Evaporating Temperature Minimum for Indoor Unit
        \note This field is used if Refrigerant Temperature Control Algorithm
        \note is VariableTemp
        \note Evaporating temperature is the refrigerant temperature, not air temperature
        \type real
        \units C
        \default 4.0
-  N12, \field Variable Evaporating Temperature Maximum for Indoor Unit
+  N10, \field Variable Evaporating Temperature Maximum for Indoor Unit
        \note This field is used if Refrigerant Temperature Control Algorithm
        \note is VariableTemp
        \note Evaporating temperature is the refrigerant temperature, not air temperature
        \type real
        \units C
        \default 13.0
-  N13, \field Variable Condensing Temperature Minimum for Indoor Unit
+  N11, \field Variable Condensing Temperature Minimum for Indoor Unit
        \note This field is used if Refrigerant Temperature Control Algorithm
        \note is VariableTemp
        \note Condensing temperature is the refrigerant temperature, not air temperature
        \type real
        \units C
        \default 42.0
-  N14, \field Variable Condensing Temperature Maximum for Indoor Unit
+  N12, \field Variable Condensing Temperature Maximum for Indoor Unit
        \note This field is used if Refrigerant Temperature Control Algorithm
        \note is VariableTemp
        \note Condensing temperature is the refrigerant temperature, not air temperature
        \type real
        \units C
        \default 46.0
-  N15, \field Outdoor Unit Fan Power Per Unit of Rated Evaporative Capacity
+  N13, \field Outdoor Unit Evaporator Reference Superheating
+       \type real
+       \units deltaC
+       \default 3
+  N14, \field Outdoor Unit Condenser Reference Subcooling
+       \type real
+       \units deltaC
+       \default 5
+  N15, \field Outdoor Unit Evaporator Rated Bypass Factor
+       \type real
+       \units dimensionless
+       \minimum> 0
+       \default 0.4
+  N16, \field Outdoor Unit Condenser Rated Bypass Factor
+       \type real
+       \units dimensionless
+       \minimum> 0
+       \default 0.2
+  N17, \field Outdoor Unit Heat Exchanger Capacity Ratio
+       \note Enter the rated capacity ratio between the main and supplementary outdoor unit heat exchangers [W/W]
+       \type real
+       \units dimensionless
+       \minimum> 0
+       \default 0.3
+  N18, \field Outdoor Unit Fan Power Per Unit of Rated Evaporative Capacity
        \note Enter the outdoor unit fan power per Watt of rated evaporative capacity [W/W]
        \units dimensionless
        \minimum> 0.0
        \default 4.25E-3
        \type real
-  N16, \field Outdoor Unit Fan Flow Rate Per Unit of Rated Evaporative Capacity
+  N19, \field Outdoor Unit Fan Flow Rate Per Unit of Rated Evaporative Capacity
        \note This field is only used if the previous is set to autocalculate and performance input method is NominalCapacity
        \units m3/s-W
        \minimum> 0.0
@@ -424,72 +447,72 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \type object-list
        \object-list QuadraticCurves
        \object-list UniVariateTables
-  N17, \field Diameter of Suction Gas Pipe
+  N20, \field Diameter of Main Pipe for Suction Gas 
        \note used to calculate the piping loss
        \type real
        \units m
        \minimum 0.0
        \default 0.0762
-  N17, \field Diameter of High and Low Pressure Gas Pipe
+  N21, \field Diameter of Main Pipe for High and Low Pressure Gas
        \note used to calculate the piping loss
        \type real
        \units m
        \minimum 0.0
        \default 0.0762
-  N18, \field Length of Main Pipe Connecting Outdoor Unit to Indoor Units
+  N22, \field Length of Main Pipe Connecting Outdoor Unit to Indoor Units
        \note used to calculate the heat loss of the main pipe
        \type real
        \units m
        \minimum 0.0
        \default 30.0
-  N19, \field Equivalent Length of Main Pipe Connecting Outdoor Unit to Indoor Units
+  N23, \field Equivalent Length of Main Pipe Connecting Outdoor Unit to Indoor Units
        \note used to calculate the refrigerant pressure drop of the main pipe
        \type real
        \units m
        \minimum 0.0
        \default 36.0
-  N20, \field Height Difference Between Outdoor Unit and Indoor Units
+  N24, \field Height Difference Between Outdoor Unit and Indoor Units
        \note Difference between outdoor unit height and indoor unit height
        \note Positive means outdoor unit is higher than indoor unit
        \note Negative means outdoor unit is lower than indoor unit
        \type real
        \units m
        \default 5.0
-  N21, \field Main Pipe Insulation Thickness
+  N25, \field Main Pipe Insulation Thickness
        \type real
        \units m
        \minimum 0.0
        \default 0.02
-  N22, \field Main Pipe Insulation Thermal Conductivity
+  N26, \field Main Pipe Insulation Thermal Conductivity
        \type real
        \units W/m-K
        \minimum 0.0
        \default 0.032
-  N23, \field Crankcase Heater Power per Compressor
+  N27, \field Crankcase Heater Power per Compressor
        \type real
        \units W
        \default 33.0
        \note Enter the value of the resistive heater located in the compressor(s). This heater
        \note is used to warm the refrigerant and oil when the compressor is off
-  N24, \field Number of Compressors
+  N28, \field Number of Compressors
        \type integer
        \units dimensionless
        \default 2
        \note Enter the total number of compressor. This input is used only for crankcase
        \note heater calculations.
-  N25, \field Ratio of Compressor Size to Total Compressor Capacity
+  N29, \field Ratio of Compressor Size to Total Compressor Capacity
        \type real
        \units W/W
        \default 0.5
        \note Enter the ratio of the first stage compressor to total compressor capacity
        \note All other compressors are assumed to be equally sized. This inputs is used
        \note only for crankcase heater calculations
-  N26, \field Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater
+  N30, \field Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater
        \type real
        \units C
        \default 5.0
        \note Enter the maximum outdoor temperature above which the crankcase heaters are disabled
-  A11, \field Defrost Strategy
+  A8, \field Defrost Strategy
        \type choice
        \key ReverseCycle
        \key Resistive
@@ -499,7 +522,7 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \note cooling to melt frost formation on the condenser coil
        \note The resistive strategy uses a resistive heater
        \note to melt the frost.
-  A12, \field Defrost Control
+  A9, \field Defrost Control
        \type choice
        \key Timed
        \key OnDemand
@@ -507,19 +530,19 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \note Choose a defrost control type
        \note Either use a fixed Timed defrost period or select
        \note OnDemand to defrost only when necessary
-  A13, \field Defrost Energy Input Ratio Modifier Function of Temperature Curve Name
+  A10, \field Defrost Energy Input Ratio Modifier Function of Temperature Curve Name
        \type object-list
        \object-list LinearCurves
        \object-list QuadraticCubicCurves
        \object-list UniVariateTables
        \note A valid performance curve must be used if ReverseCycle defrost strategy is selected
-  N27, \field Defrost Time Period Fraction
+  N31, \field Defrost Time Period Fraction
        \type real
        \minimum 0.0
        \default 0.058333
        \note Fraction of time in defrost mode
        \note Only applicable if timed defrost control is specified
-  N28, \field Resistive Defrost Heater Capacity
+  N32, \field Resistive Defrost Heater Capacity
        \type real
        \minimum 0.0
        \default 0.0
@@ -528,255 +551,246 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \note Enter the size of the resistive defrost heating element
        \note Only applicable if resistive defrost strategy is specified
        \ip-units W
-  N29, \field Maximum Outdoor Dry-bulb Temperature for Defrost Operation
+  N33, \field Maximum Outdoor Dry-bulb Temperature for Defrost Operation
        \type real
        \units C
        \default 5.0
        \note Enter the maximum outdoor temperature above which the defrost operation is disabled
-  N30, \field Compressor maximum delta Pressure
-       \type real
-       \units Pa
-       \default 4500000.0
-       \minimum 0.0
-       \maximum 50000000.0
-  N31, \field Number of Compressor Loading Index Entries
-       \required-field
-       \type integer
-       \default 2
-       \minimum 2
-       \maximum 11
-       \note First index represents minimal capacity operation
-       \note Last index represents full capacity operation
-  N32, \field Compressor Speed at Loading Index 1
-       \type real
-       \note Minimum compressor speed
-       \units rev/min
-       \minimum> 0
-  A14, \field Loading Index 1 Evaporative Capacity Multiplier Function of Temperature Curve Name
-       \required-field
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  A15, \field Loading Index 1 Compressor Power Multiplier Function of Temperature Curve Name
-       \required-field
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  N33, \field Compressor Speed at Loading Index 2
-       \type real
-       \units rev/min
-       \minimum> 0
-  A16, \field Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
-       \required-field
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  A17, \field Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
-       \required-field
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  N34, \field Compressor Speed at Loading Index 3
-       \type real
-       \units rev/min
-       \minimum> 0
-  A18, \field Loading Index 3 Evaporative Capacity Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  A19, \field Loading Index 3 Compressor Power Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  N35, \field Compressor Speed at Loading Index 4
-       \type real
-       \units rev/min
-       \minimum> 0
-  A20, \field Loading Index 4 Evaporative Capacity Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  A21, \field Loading Index 4 Compressor Power Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  N36, \field Compressor Speed at Loading Index 5
-       \type real
-       \units rev/min
-       \minimum> 0
-  A22, \field Loading Index 5 Evaporative Capacity Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  A23, \field Loading Index 5 Compressor Power Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  N37, \field Compressor Speed at Loading Index 6
-       \type real
-       \units rev/min
-       \minimum> 0
-  A24, \field Loading Index 6 Evaporative Capacity Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  A25, \field Loading Index 6 Compressor Power Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  N38, \field Compressor Speed at Loading Index 7
-       \type real
-       \units rev/min
-       \minimum> 0
-  A26, \field Loading Index 7 Evaporative Capacity Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  A27, \field Loading Index 7 list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  N39, \field Compressor Speed at Loading Index 8
-       \type real
-       \units rev/min
-       \minimum> 0
-  A28, \field Loading Index 8 Evaporative Capacity Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  A29, \field Loading Index 8 Compressor Power Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  N40, \field Compressor Speed at Loading Index 9
-       \type real
-       \units rev/min
-       \minimum> 0
-  A30, \field Loading Index 9 Evaporative Capacity Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  A31, \field Loading Index 9 Compressor Power Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables       
-  N41, \field Compressor Speed at Loading Index 10
-       \type real
-       \units rev/min
-       \minimum> 0
-  A32, \field Loading Index 10 Evaporative Capacity Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  A33, \field Loading Index 10 Compressor Power Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  N42, \field Compressor Speed at Loading Index 11
-       \type real
-       \units rev/min
-       \minimum> 0
-  A34, \field Loading Index 11 Evaporative Capacity Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-  A35, \field Loading Index 11 Compressor Power Multiplier Function of Temperature Curve Name
-       \type object-list
-       \object-list BiQuadraticCurves
-       \object-list BiVariateTables
-       
-  N31, \field Initial Heat Recovery Cooling Capacity Fraction
+  N34, \field Initial Heat Recovery Cooling Capacity Fraction
        \type real
        \units W/W
        \default 0.5
+       \note This is used to describe the transition from Cooling Only mode to Heat Recovery mode
        \note Enter the fractional capacity available at the start
        \note of heat recovery mode. The capacity exponentially approaches
        \note the steady-state value according to the inputs for
        \note Heat Recovery Cooling Capacity Modifier and Heat Recovery
        \note Cooling Capacity Time Constant
-  N32, \field Heat Recovery Cooling Capacity Time Constant
+  N35, \field Heat Recovery Cooling Capacity Time Constant
        \type real
        \units hr
        \default 0.15
+       \note This is used to describe the transition from Cooling Only mode to Heat Recovery mode
        \note Enter the time constant used to model the transition
        \note from cooling only mode to heat recovery mode
-  N33, \field Initial Heat Recovery Cooling Energy Fraction
+  N36, \field Initial Heat Recovery Cooling Energy Fraction
        \type real
        \units W/W
        \default 1.0
+       \note This is used to describe the transition from Cooling Only mode to Heat Recovery mode
        \note Enter the fractional electric consumption rate at the start
        \note of heat recovery mode. The electric consumption rate exponentially
        \note approaches the steady-state value according to the inputs for
        \note Heat Recovery Cooling Energy Modifier and Heat Recovery
        \note Cooling Energy Time Constant
-  N34, \field Heat Recovery Cooling Energy Time Constant
+  N37, \field Heat Recovery Cooling Energy Time Constant
        \type real
        \units hr
        \default 0
+       \note This is used to describe the transition from Cooling Only mode to Heat Recovery mode
        \note Enter the time constant used to model the transition
        \note from cooling only mode to heat recovery mode
-  N35, \field Initial Heat Recovery Heating Capacity Fraction
+  N38, \field Initial Heat Recovery Heating Capacity Fraction
        \type real
        \units W/W
        \default 1
+       \note This is used to describe the transition from Heating Only mode to Heat Recovery mode
        \note Enter the fractional capacity available at the start
        \note of heat recovery mode. The capacity exponentially approaches
        \note the steady-state value according to the inputs for
        \note Heat Recovery Heating Capacity Modifier and Heat Recovery
        \note Heating Capacity Time Constant
-  N36, \field Heat Recovery Heating Capacity Time Constant
+  N39, \field Heat Recovery Heating Capacity Time Constant
        \type real
        \units hr
        \default 0.15
+       \note This is used to describe the transition from Heating Only mode to Heat Recovery mode
        \note Enter the time constant used to model the transition
        \note from cooling only mode to heat recovery mode
-  N37, \field Initial Heat Recovery Heating Energy Fraction
+  N40, \field Initial Heat Recovery Heating Energy Fraction
        \type real
        \units W/W
        \default 1
+       \note This is used to describe the transition from Heating Only mode to Heat Recovery mode
        \note Enter the fractional electric consumption rate at the start
        \note of heat recovery mode. The electric consumption rate exponentially
        \note approaches the steady-state value according to the inputs for
        \note Heat Recovery Cooling Energy Modifier and Heat Recovery
        \note Cooling Energy Time Constant
-  N38, \field Heat Recovery Heating Energy Time Constant
+  N41, \field Heat Recovery Heating Energy Time Constant
        \type real
        \units hr
        \default 0
+       \note This is used to describe the transition from Heating Only mode to Heat Recovery mode
        \note Enter the time constant used to model the transition
        \note from cooling only mode to heat recovery mode
-
-  N47, \field Outdoor Unit Heat Exchanger Capacity Ratio
+  N42, \field Compressor maximum delta Pressure
        \type real
-       \units dimensionless
-       \minimum> 0
-       \default 0.3
-	   
-  N48, \field Outdoor Unit Evaporator Rated Bypass Factor
-       \type real
-       \units dimensionless
-       \minimum> 0
-       \default 0.4
-  N49, \field Outdoor Unit Condenser Rated Bypass Factor
-       \type real
-       \units dimensionless
-       \minimum> 0
-       \default 0.2
-  N50, \field Evaporative Capacity Correction Factor
-       \type real
-       \units dimensionless
-       \minimum> 0
-       \default 1.0
-       \note Describes the evaporative capacity difference because of system configuration 
-       \note difference between test bed and investigated system.
-  N51; \field Compressor Inverter Efficiency
+       \units Pa
+       \default 4500000.0
+       \minimum 0.0
+       \maximum 50000000.0
+  N43, \field Compressor Inverter Efficiency
        \type real
        \units dimensionless
        \minimum> 0
        \maximum 1.0
        \default 0.95
        \note Efficiency of the compressor inverter
-	   
-	(Tianzhen, I will further clean up the order and numbering of these fields soon. Rongpeng)
+  N44, \field Compressor Evaporative Capacity Correction Factor
+       \type real
+       \units dimensionless
+       \minimum> 0
+       \default 1.0
+       \note Describe the evaporative capacity difference because of system configuration 
+       \note difference between test bed and real system.
+  N45, \field Number of Compressor Loading Index Entries
+       \required-field
+       \type integer
+       \default 2
+       \minimum 2
+       \maximum 11
+       \note Load index describe the compressor operational state, 
+       \note either a single compressor or multiple compressors, at different load levels. 
+       \note First index represents minimal capacity operation
+       \note Last index represents full capacity operation
+  N46, \field Compressor Speed at Loading Index 1
+       \type real
+       \note Minimum compressor speed
+       \units rev/min
+       \minimum> 0
+  A11, \field Loading Index 1 Evaporative Capacity Multiplier Function of Temperature Curve Name
+       \required-field
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  A12, \field Loading Index 1 Compressor Power Multiplier Function of Temperature Curve Name
+       \required-field
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  N47, \field Compressor Speed at Loading Index 2
+       \type real
+       \units rev/min
+       \minimum> 0
+  A13, \field Loading Index 2 Evaporative Capacity Multiplier Function of Temperature Curve Name
+       \required-field
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  A14, \field Loading Index 2 Compressor Power Multiplier Function of Temperature Curve Name
+       \required-field
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  N48, \field Compressor Speed at Loading Index 3
+       \type real
+       \units rev/min
+       \minimum> 0
+  A15, \field Loading Index 3 Evaporative Capacity Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  A16, \field Loading Index 3 Compressor Power Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  N49, \field Compressor Speed at Loading Index 4
+       \type real
+       \units rev/min
+       \minimum> 0
+  A17, \field Loading Index 4 Evaporative Capacity Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  A18, \field Loading Index 4 Compressor Power Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  N50, \field Compressor Speed at Loading Index 5
+       \type real
+       \units rev/min
+       \minimum> 0
+  A19, \field Loading Index 5 Evaporative Capacity Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  A20, \field Loading Index 5 Compressor Power Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  N51, \field Compressor Speed at Loading Index 6
+       \type real
+       \units rev/min
+       \minimum> 0
+  A21, \field Loading Index 6 Evaporative Capacity Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  A22, \field Loading Index 6 Compressor Power Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  N52, \field Compressor Speed at Loading Index 7
+       \type real
+       \units rev/min
+       \minimum> 0
+  A23, \field Loading Index 7 Evaporative Capacity Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  A24, \field Loading Index 7 list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  N53, \field Compressor Speed at Loading Index 8
+       \type real
+       \units rev/min
+       \minimum> 0
+  A25, \field Loading Index 8 Evaporative Capacity Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  A26, \field Loading Index 8 Compressor Power Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  N54, \field Compressor Speed at Loading Index 9
+       \type real
+       \units rev/min
+       \minimum> 0
+  A27, \field Loading Index 9 Evaporative Capacity Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  A28, \field Loading Index 9 Compressor Power Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables       
+  N55, \field Compressor Speed at Loading Index 10
+       \type real
+       \units rev/min
+       \minimum> 0
+  A29, \field Loading Index 10 Evaporative Capacity Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  A30, \field Loading Index 10 Compressor Power Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  N56, \field Compressor Speed at Loading Index 11
+       \type real
+       \units rev/min
+       \minimum> 0
+  A31, \field Loading Index 11 Evaporative Capacity Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+  A32; \field Loading Index 11 Compressor Power Multiplier Function of Temperature Curve Name
+       \type object-list
+       \object-list BiQuadraticCurves
+       \object-list BiVariateTables
+     
 ``` 
 	   
 	   
@@ -805,6 +819,6 @@ A new example file "VariableRefrigerantFlow_FluidTCtrl_HR.idf" will be provided 
 
 ## References ##
 
-Tianzhen Hong, Kaiyu Sun, Rongpeng Zhang, Oren Schetrit. Modeling, Field Test and Simulation of Energy Performance of Daikin VRF-S Systems in California Houses. LBNL Report, March 2015.
+Hong, T., Sun, K., Zhang, R., Hinokuma, R., Kasahara, S., & Yura, Y. (2015). Development and validation of a new variable refrigerant flow system model in EnergyPlus. Energy and Buildings, 117, 399–411.
 
 Handbook of Compact Heat Exchangers. Yu Sesimo, Masao Fujii. Tokyo, Japan, 1992.
