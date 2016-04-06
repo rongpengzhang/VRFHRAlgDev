@@ -90,11 +90,11 @@ With the help of FWV and BS units, every operational mode has its own refrigeran
 
 ![](VRF-HR-Chart-EnthalpyPressure.PNG)
 
+Similarly to the VRF-FluidTCtrl-HP model, the VRF-FluidTCtrl-HR model implements a set of power/capacity curves to describe the compressor performance under a range of Load Indices (LI). LI indicates the particular operational state of compressor(s) at a given load condition. For the system with a single compressor, it corresponds to the compressor speed; for the system with multiple OUs or a single OU with multiple compressors, it is related with the load sharing strategies between compressors.
+
 ##### Implementation of the proposed model
 
 Figure 3 shows the coding hierarchy of the existing VRF models in EnergyPlus (V8.4+), including the VRF-SystemCurve model (both HP and HR) and the VRF-FluidTCtrl model (HP only). Both the indoor unit and outdoor unit parts are described by the "HVACVariableRefrigerantFlow.cc" file, and it refers to "DXCoil.cc" file for coil performance simulations. 
-
-Similarly to the VRF-FluidTCtrl-HP model, the VRF-FluidTCtrl-HR model implements a set of power/capacity curves to describe the compressor performance under a range of Load Indices (LI). LI indicates the particular operational state of compressor(s) at a given load condition. For the system with a single compressor, it corresponds to the compressor speed; for the system with multiple OUs or a single OU with multiple compressors, it is related with the load sharing strategies between compressors.
  
 The implementation of the VRF-FluidTCtrl-HR model will present additions to the existing VRF-FluidTCtrl-HP model, without changing the coding hierarchy of the key methods. Therefore, the implementation is expected to generate no or little impacts on the existing features of EnergyPlus. More specifically, the proposed algorithm will go to the method “HVACVariableRefrigerantFlow::CalcVRFCondenser_FluidTCtrl”, which was newly added in V8.4 particularly to describe the outdoor unit part of the VRF-FluidTCtrl-HP model. The indoor unit part of the current VRF-FluidTCtrl-HP model is able to handle the indoor unit performance of the HR systems, and thus will not be modified.
 
