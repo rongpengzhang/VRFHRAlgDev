@@ -66,7 +66,9 @@ The new VRF HR model is for 3-pipe systems, which is the dominant system configu
 
 ## Overview ##
 
-The VRF-HR system has more complicated configurations than the VRF-HP system. Figure 1 shows the schematic chart of a 3-pipe VRF-HR system, a dominant system configuration in the VRF-HR market. As can be seen in the figure, there are two heat exchangers in the outdoor unit. They can work at different evaporator/condenser combinations to generate specific operational modes. Also note that there are a number of Four-Way Directional Valves (FWV) and Branch Selector (BS) Units in the system, which are used to create separate refrigerant piping connections for different operational mode. These features allow the system to provide simultaneous heating/cooling to address diverse space conditioning situations.
+The VRF-HR system has more complicated configurations than the VRF-HP system. Figure 1 shows the schematic chart of a 3-pipe VRF-HR system, a dominant system configuration in the VRF-HR market. As can be seen in the figure, it has dedicated refrigerant pipes for suction gas, liquid and discharge gas. There are two heat exchangers in the outdoor unit, which can work at different evaporator/condenser combinations to generate specific operational modes. Also note that there are a number of Four-Way Directional Valves (FWV) and Branch Selector (BS) Units in the system, which are used to create separate refrigerant piping connections for different operational mode. These features allow the system to provide simultaneous heating/cooling to address diverse space conditioning situations.
+
+
 
 ![](VRF-HR-Chart-Schematic.PNG)
 Figure 1. Schematic chart of a 3-pipe VRF-HR system
@@ -79,7 +81,7 @@ Depending on the indoor cooling/heating requirements and the outdoor unit operat
 -	Mode 5: Simultaneous heating and cooling. The sum of cooling loads and compressor heat is much smaller than the heating loads. Both OU heat exchangers perform as evaporators.
 -	Mode 6: Heating load only. No cooling load. Both OU heat exchangers perform as evaporators.
 
-The system-level heat balance diagram for all the six operational modes are shown Figure 2. Note that the heat recovery loss (HR loss) only exists in Mode 3 and Mode 4, in which the OU evaporator and condenser run simultaneously. In these modes, the following two items are at similar levels: (a) sum of IU heating load and IU condenser side piping loss, and (b) sum of IU cooling load, IU evaporator side piping loss and heat released by compressor. Take Mode 3 for example, item (b) is higher than item (a), and therefore the system requires the operation of OU condenser to release the extra heat to ensure the system-level heat balance. However, the extra heat is at a very low level that the OU condenser can not exactly meet it because of its control limitations. To ensure stable OU condenser operation as well as system-level heat balance, the system needs to release more heat than the required via OU condenser, and meanwhile runs OU evaporator to balance the amount of heat released more than required. Theoretically, the operation of OU evaporators is not needed, but in reality it cannot be avoided. This part of energy is called HR loss which results in a lower system energy efficiency than the theoretical case. 
+The system-level heat balance diagram for all the six operational modes are shown Figure 2. Note that the heat recovery loss (HR loss) only exists in Mode 3 and Mode 4, in which the OU evaporator and condenser run simultaneously. In these modes, the following two items are at similar levels: (a) sum of IU heating load and IU condenser side piping loss, and (b) sum of IU cooling load, IU evaporator side piping loss and heat released by compressor. Take Mode 3 for example, item (b) is higher than item (a), and therefore the system requires the operation of OU condenser to release the extra heat to ensure the system-level heat balance. However, the extra heat is at a relatively low level so that the system needs to release more heat than required via OU condenser and meanwhile runs OU evaporator to ensure the heat balance as well as system reliability. This leads to the presence of HR loss, which cannot be avoided in reality due to OU local control limitations.
 
 ![](VRF-HR-Chart-HeatBalance.PNG)
 Figure 2. System-level Heat Balance Diagram for All VRF-HR Operational Modes
@@ -330,25 +332,25 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \note The actual compressor power is obtained by multiplying the
        \note rated power with the modification factor calculated by Compressor
        \note Power Multiplier Function of Temperature Curve
-  N3 , \field Minimum Outdoor Air Temperature in Cooling Only Mode
+  N3 , \field Minimum Outdoor Air Dry-Bulb Temperature for Cooling
        \type real
        \units C
        \default -6.0
        \note Enter the minimum outdoor temperature allowed for cooling operation
        \note Cooling is disabled below this temperature
-  N4 , \field Maximum Outdoor Air Temperature in Cooling Only Mode
+  N4 , \field Maximum Outdoor Air Dry-Bulb Temperature for Cooling
        \type real
        \units C
        \default 43.0
        \note Enter the maximum outdoor temperature allowed for cooling operation
        \note Cooling is disabled above this temperature
-  N5 , \field Minimum Outdoor Air Temperature in Heating Only and Simultaneous H/C Mode
+  N5 , \field Minimum Outdoor Air Wet-Bulb Temperature for Heating
        \type real
        \units C
        \default -20.0
        \note Enter the minimum outdoor temperature allowed for heating operation
        \note Heating is disabled below this temperature
-  N6 , \field Maximum Outdoor Air Temperature in Heating Only and Simultaneous H/C Mode
+  N6 , \field Maximum Outdoor Air Wet-Bulb Temperature for Heating
        \type real
        \units C
        \default 16.0
@@ -419,19 +421,23 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \units dimensionless
        \minimum> 0
        \default 0.2
-  N17, \field Outdoor Unit Heat Exchanger Capacity Ratio
+  N17, \field Difference between Outdoor Unit Evaporating Temperature and Outdoor Air Temperature during Simultaneous Heating and Cooling
+       \type real
+       \units deltaC
+       \default 5
+  N18, \field Outdoor Unit Heat Exchanger Capacity Ratio
        \note Enter the rated capacity ratio between the main and supplementary outdoor unit heat exchangers [W/W]
        \type real
        \units dimensionless
        \minimum> 0
        \default 0.3
-  N18, \field Outdoor Unit Fan Power Per Unit of Rated Evaporative Capacity
+  N19, \field Outdoor Unit Fan Power Per Unit of Rated Evaporative Capacity
        \note Enter the outdoor unit fan power per Watt of rated evaporative capacity [W/W]
        \units dimensionless
        \minimum> 0.0
        \default 4.25E-3
        \type real
-  N19, \field Outdoor Unit Fan Flow Rate Per Unit of Rated Evaporative Capacity
+  N20, \field Outdoor Unit Fan Flow Rate Per Unit of Rated Evaporative Capacity
        \note This field is only used if the previous is set to autocalculate and performance input method is NominalCapacity
        \units m3/s-W
        \minimum> 0.0
@@ -447,67 +453,67 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \type object-list
        \object-list QuadraticCurves
        \object-list UniVariateTables
-  N20, \field Diameter of Main Pipe for Suction Gas 
+  N21, \field Diameter of Main Pipe for Suction Gas 
        \note used to calculate the piping loss
        \type real
        \units m
        \minimum 0.0
        \default 0.0762
-  N21, \field Diameter of Main Pipe for High and Low Pressure Gas
+  N22, \field Diameter of Main Pipe for Discharge Gas
        \note used to calculate the piping loss
        \type real
        \units m
        \minimum 0.0
        \default 0.0762
-  N22, \field Length of Main Pipe Connecting Outdoor Unit to Indoor Units
+  N23, \field Length of Main Pipe Connecting Outdoor Unit to Indoor Units
        \note used to calculate the heat loss of the main pipe
        \type real
        \units m
        \minimum 0.0
        \default 30.0
-  N23, \field Equivalent Length of Main Pipe Connecting Outdoor Unit to Indoor Units
+  N24, \field Equivalent Length of Main Pipe Connecting Outdoor Unit to Indoor Units
        \note used to calculate the refrigerant pressure drop of the main pipe
        \type real
        \units m
        \minimum 0.0
        \default 36.0
-  N24, \field Height Difference Between Outdoor Unit and Indoor Units
+  N25, \field Height Difference Between Outdoor Unit and Indoor Units
        \note Difference between outdoor unit height and indoor unit height
        \note Positive means outdoor unit is higher than indoor unit
        \note Negative means outdoor unit is lower than indoor unit
        \type real
        \units m
        \default 5.0
-  N25, \field Main Pipe Insulation Thickness
+  N26, \field Main Pipe Insulation Thickness
        \type real
        \units m
        \minimum 0.0
        \default 0.02
-  N26, \field Main Pipe Insulation Thermal Conductivity
+  N27, \field Main Pipe Insulation Thermal Conductivity
        \type real
        \units W/m-K
        \minimum 0.0
        \default 0.032
-  N27, \field Crankcase Heater Power per Compressor
+  N28, \field Crankcase Heater Power per Compressor
        \type real
        \units W
        \default 33.0
        \note Enter the value of the resistive heater located in the compressor(s). This heater
        \note is used to warm the refrigerant and oil when the compressor is off
-  N28, \field Number of Compressors
+  N29, \field Number of Compressors
        \type integer
        \units dimensionless
        \default 2
        \note Enter the total number of compressor. This input is used only for crankcase
        \note heater calculations.
-  N29, \field Ratio of Compressor Size to Total Compressor Capacity
+  N30, \field Ratio of Compressor Size to Total Compressor Capacity
        \type real
        \units W/W
        \default 0.5
        \note Enter the ratio of the first stage compressor to total compressor capacity
        \note All other compressors are assumed to be equally sized. This inputs is used
        \note only for crankcase heater calculations
-  N30, \field Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater
+  N31, \field Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater
        \type real
        \units C
        \default 5.0
@@ -536,13 +542,13 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \object-list QuadraticCubicCurves
        \object-list UniVariateTables
        \note A valid performance curve must be used if ReverseCycle defrost strategy is selected
-  N31, \field Defrost Time Period Fraction
+  N32, \field Defrost Time Period Fraction
        \type real
        \minimum 0.0
        \default 0.058333
        \note Fraction of time in defrost mode
        \note Only applicable if timed defrost control is specified
-  N32, \field Resistive Defrost Heater Capacity
+  N33, \field Resistive Defrost Heater Capacity
        \type real
        \minimum 0.0
        \default 0.0
@@ -551,12 +557,12 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \note Enter the size of the resistive defrost heating element
        \note Only applicable if resistive defrost strategy is specified
        \ip-units W
-  N33, \field Maximum Outdoor Dry-bulb Temperature for Defrost Operation
+  N34, \field Maximum Outdoor Dry-bulb Temperature for Defrost Operation
        \type real
        \units C
        \default 5.0
        \note Enter the maximum outdoor temperature above which the defrost operation is disabled
-  N34, \field Initial Heat Recovery Cooling Capacity Fraction
+  N35, \field Initial Heat Recovery Cooling Capacity Fraction
        \type real
        \units W/W
        \default 0.5
@@ -566,14 +572,14 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \note the steady-state value according to the inputs for
        \note Heat Recovery Cooling Capacity Modifier and Heat Recovery
        \note Cooling Capacity Time Constant
-  N35, \field Heat Recovery Cooling Capacity Time Constant
+  N36, \field Heat Recovery Cooling Capacity Time Constant
        \type real
        \units hr
        \default 0.15
        \note This is used to describe the transition from Cooling Only mode to Heat Recovery mode
        \note Enter the time constant used to model the transition
        \note from cooling only mode to heat recovery mode
-  N36, \field Initial Heat Recovery Cooling Energy Fraction
+  N37, \field Initial Heat Recovery Cooling Energy Fraction
        \type real
        \units W/W
        \default 1.0
@@ -583,14 +589,14 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \note approaches the steady-state value according to the inputs for
        \note Heat Recovery Cooling Energy Modifier and Heat Recovery
        \note Cooling Energy Time Constant
-  N37, \field Heat Recovery Cooling Energy Time Constant
+  N38, \field Heat Recovery Cooling Energy Time Constant
        \type real
        \units hr
        \default 0
        \note This is used to describe the transition from Cooling Only mode to Heat Recovery mode
        \note Enter the time constant used to model the transition
        \note from cooling only mode to heat recovery mode
-  N38, \field Initial Heat Recovery Heating Capacity Fraction
+  N39, \field Initial Heat Recovery Heating Capacity Fraction
        \type real
        \units W/W
        \default 1
@@ -600,14 +606,14 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \note the steady-state value according to the inputs for
        \note Heat Recovery Heating Capacity Modifier and Heat Recovery
        \note Heating Capacity Time Constant
-  N39, \field Heat Recovery Heating Capacity Time Constant
+  N40, \field Heat Recovery Heating Capacity Time Constant
        \type real
        \units hr
        \default 0.15
        \note This is used to describe the transition from Heating Only mode to Heat Recovery mode
        \note Enter the time constant used to model the transition
        \note from cooling only mode to heat recovery mode
-  N40, \field Initial Heat Recovery Heating Energy Fraction
+  N41, \field Initial Heat Recovery Heating Energy Fraction
        \type real
        \units W/W
        \default 1
@@ -617,34 +623,34 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \note approaches the steady-state value according to the inputs for
        \note Heat Recovery Cooling Energy Modifier and Heat Recovery
        \note Cooling Energy Time Constant
-  N41, \field Heat Recovery Heating Energy Time Constant
+  N42, \field Heat Recovery Heating Energy Time Constant
        \type real
        \units hr
        \default 0
        \note This is used to describe the transition from Heating Only mode to Heat Recovery mode
        \note Enter the time constant used to model the transition
        \note from cooling only mode to heat recovery mode
-  N42, \field Compressor maximum delta Pressure
+  N43, \field Compressor maximum delta Pressure
        \type real
        \units Pa
        \default 4500000.0
        \minimum 0.0
        \maximum 50000000.0
-  N43, \field Compressor Inverter Efficiency
+  N44, \field Compressor Inverter Efficiency
        \type real
        \units dimensionless
        \minimum> 0
        \maximum 1.0
        \default 0.95
        \note Efficiency of the compressor inverter
-  N44, \field Compressor Evaporative Capacity Correction Factor
+  N45, \field Compressor Evaporative Capacity Correction Factor
        \type real
        \units dimensionless
        \minimum> 0
        \default 1.0
        \note Describe the evaporative capacity difference because of system configuration 
        \note difference between test bed and real system.
-  N45, \field Number of Compressor Loading Index Entries
+  N46, \field Number of Compressor Loading Index Entries
        \required-field
        \type integer
        \default 2
@@ -654,7 +660,7 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \note either a single compressor or multiple compressors, at different load levels. 
        \note First index represents minimal capacity operation
        \note Last index represents full capacity operation
-  N46, \field Compressor Speed at Loading Index 1
+  N47, \field Compressor Speed at Loading Index 1
        \type real
        \note Minimum compressor speed
        \units rev/min
@@ -669,7 +675,7 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \type object-list
        \object-list BiQuadraticCurves
        \object-list BiVariateTables
-  N47, \field Compressor Speed at Loading Index 2
+  N48, \field Compressor Speed at Loading Index 2
        \type real
        \units rev/min
        \minimum> 0
@@ -683,7 +689,7 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \type object-list
        \object-list BiQuadraticCurves
        \object-list BiVariateTables
-  N48, \field Compressor Speed at Loading Index 3
+  N49, \field Compressor Speed at Loading Index 3
        \type real
        \units rev/min
        \minimum> 0
@@ -695,7 +701,7 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \type object-list
        \object-list BiQuadraticCurves
        \object-list BiVariateTables
-  N49, \field Compressor Speed at Loading Index 4
+  N50, \field Compressor Speed at Loading Index 4
        \type real
        \units rev/min
        \minimum> 0
@@ -707,7 +713,7 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \type object-list
        \object-list BiQuadraticCurves
        \object-list BiVariateTables
-  N50, \field Compressor Speed at Loading Index 5
+  N51, \field Compressor Speed at Loading Index 5
        \type real
        \units rev/min
        \minimum> 0
@@ -719,7 +725,7 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \type object-list
        \object-list BiQuadraticCurves
        \object-list BiVariateTables
-  N51, \field Compressor Speed at Loading Index 6
+  N52, \field Compressor Speed at Loading Index 6
        \type real
        \units rev/min
        \minimum> 0
@@ -731,7 +737,7 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \type object-list
        \object-list BiQuadraticCurves
        \object-list BiVariateTables
-  N52, \field Compressor Speed at Loading Index 7
+  N53, \field Compressor Speed at Loading Index 7
        \type real
        \units rev/min
        \minimum> 0
@@ -742,7 +748,7 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
   A24, \field Loading Index 7 list
        \object-list BiQuadraticCurves
        \object-list BiVariateTables
-  N53, \field Compressor Speed at Loading Index 8
+  N54, \field Compressor Speed at Loading Index 8
        \type real
        \units rev/min
        \minimum> 0
@@ -754,7 +760,7 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \type object-list
        \object-list BiQuadraticCurves
        \object-list BiVariateTables
-  N54, \field Compressor Speed at Loading Index 9
+  N55, \field Compressor Speed at Loading Index 9
        \type real
        \units rev/min
        \minimum> 0
@@ -766,7 +772,7 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \type object-list
        \object-list BiQuadraticCurves
        \object-list BiVariateTables       
-  N55, \field Compressor Speed at Loading Index 10
+  N56, \field Compressor Speed at Loading Index 10
        \type real
        \units rev/min
        \minimum> 0
@@ -778,7 +784,7 @@ AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR,
        \type object-list
        \object-list BiQuadraticCurves
        \object-list BiVariateTables
-  N56, \field Compressor Speed at Loading Index 11
+  N57, \field Compressor Speed at Loading Index 11
        \type real
        \units rev/min
        \minimum> 0
