@@ -35,8 +35,7 @@ The proposed new VRF-HR model inherits many key features of the recently impleme
 This looks interesting.  I have no problems with the overall approach.  
 It seems to me after studying Figure 3 that there might be a reason to organize it as having 12 modes, each of your 6 modes with and without the low load modification.
 -	Reply:
-You are right that every operational mode may have two sub-modes: with and without the low load modification. That will affect the operational conditions such as evaporating temperature levels, but will not change the system configurations, i.e., the piping connections and the refrigerant flow directions. So, it may not be quite necessary to increase the mode number from 6 to 12 just for the low load modifications. 
-We defined the 6 operational mode mainly depending on the different system configurations. We tried to keep the mode number low to make the algorithm clear and concise, but are these six modes are so different that we cannot combine them. We have to develop specific algorithm for each of them.
+It is correct that every operational mode may be divided into sub-modes: with and without the low load modification. That will affect the operational conditions such as evaporating temperature levels, but will not change the system configurations, i.e., the piping connections and the refrigerant flow directions. We defined the 6 operational mode mainly depending on the different system configurations. We tried to keep the mode number low to make the algorithm clear and concise. So, it may not be quite necessary to increase the mode number from 6 to 12 just for the low load modifications or the some local control states.
 
 •	Richard, Jan. 20. 2016
 
@@ -45,16 +44,16 @@ We defined the 6 operational mode mainly depending on the different system confi
 2) How will you know when to provide heating and cooling with (mode 3) and W/O HR mode (mode 2)?
 3) Is there enough information about the piping system to accurately model piping losses?
 -	Reply:
-(1) It seems most current VRF-HR systems implement two OU heat exchangers to support enhanced control strategy. Not sure how widely used the single heat exchange systems are. I will double check with our manufacturer partner. Probably we will only handle the dominant system configurations in the market for now.
-(2) The operational mode is determined by the algorithm, not the user, based on the load requirements and operational conditions. We have developed a specific HR loss calculation method making use of the refrigerant loop information. This plays a key role in the mode determinations. More details will be included in DD.
-(3) The piping loss calculations in VRF-HR are similar to those in the VRF-HP model. The information it requires (including main pipe length, equivalent length, diameter, and insulation) can usually be obtained from the system engineering manual.
+(1) To our knowledge the current 3-pipe VRF-HR systems implement two OU heat exchangers to support enhanced control strategy. Single heat exchange is only implemented in the 2-pipe VRF-HR system which is out of the scope of the proposed model.
+(2) The operational mode is determined by the algorithm, not the user, based on the load requirements and operational conditions. We have developed a specific HR loss calculation method making use of the refrigerant loop information, operational information, and the provided compressor curves.
+(3) The piping loss calculations in VRF-HR are similar to those in the VRF-HP model. The information it requires (including main pipe length, equivalent length, diameter, and insulation) can usually be obtained from the system engineering manual. The only difference is that the HR system has 3 pipes, and the diameter of the discharge gas pipe and suction gas pipe may be different. Therefore, users need to provide the more information on pipe configurations than that in the HP system.
 
 •	Jason Glazer, Jan. 27. 2016
 
 -	Comments:
 It would be great if either a user input or at least an output would show the ARHI Simultaneous Cooling and Heating Efficiency (SCHE) rating condition as described in AHRI 1230 and any other figures of merit that are unique for heat recovery VRF systems. Outputs of the rated IEER would be good too. 
 -	Reply:
-Good suggestions. We will ourput this key parameter for HR operations.
+Good suggestions. We will output this key parameter for HR operations.
 
 •	Bereket Nigusse, Jan. 27. 2016
 
