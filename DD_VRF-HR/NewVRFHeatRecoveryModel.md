@@ -174,7 +174,8 @@ b. Calculate the Loading Index LI_2 satisfying I/U heating load (Refer to Engine
 
 c. If LI_1 <= LI_2, the system operates at Mode 5
 
-d. If LI_1 > LI_2 and Te' < To - T_diff, the system operates at Mode 2
+d. If LI_1 > LI_2 and Te' < To - T_diff, the system operates at Mode 2 
+(To: outdoor air dry-bulb temperature; T_diff: a constant value representing the difference between OU evaporating temperature and outdoor air temperature during simultaneous heating and cooling)
 
 e. If LI_1 > LI_2 and Te' >= To - T_diff, the system operates at Mode 3 or 4 (these two modes can be handled by one set of algorithms)
 
