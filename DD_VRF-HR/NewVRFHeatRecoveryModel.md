@@ -174,14 +174,14 @@ b. Calculate the Loading Index LI_2 satisfying I/U heating load (Refer to Engine
 
 c. If LI_1 <= LI_2, the system operates at Mode 5
 
-d. If LI_1 > LI_2 and Te' < To - 5, the system operates at Mode 2
+d. If LI_1 > LI_2 and Te' < To - T_diff, the system operates at Mode 2
 
-e. If LI_1 > LI_2 and Te' >= To - 5, the system operates at Mode 3 or 4 (these two modes can be handled by one set of algorithms)
+e. If LI_1 > LI_2 and Te' >= To - T_diff, the system operates at Mode 3 or 4 (these two modes can be handled by one set of algorithms)
 
 
 ##### Step 7-A: O/U operation analysis at Mode 5
 
-** If Te' < To - 5, perform the following procedures: **
+**If Te' < To - T_diff, perform the following procedures:**
 
 a. Select the compressor speed corresponding to LI_2
 
@@ -196,7 +196,7 @@ d. Calculate the O/U evaporator load (Cap_ou_evap) based on system-level heat ba
 e. Obtain the O/U fan flow rate (m_air_evap) corresponding to Cap_ou_evap, and thus the fan power
 (Refer to Engineering Reference V8.4+: Step 2c.3 in the VRF-FluidTCtrl-HP model for more details.)
 
-** If Te' >= To - 5, perform the following procedures: **
+**If Te' >= To - T_diff, perform the following procedures:**
 
 a. Select the compressor speed corresponding to LI_1
 
