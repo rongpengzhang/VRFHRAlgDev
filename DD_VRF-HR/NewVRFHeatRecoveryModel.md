@@ -5,7 +5,7 @@ A New VRF Heat Recovery System Model
  **Lawrence Berkeley National Laboratory**
 
  - Original Date: Jan. 16, 2016
- - Revision Date: Apr.  7, 2016
+ - Revision Date: Apr. 7, 2016
  - Revision Date: Apr. 12, 2016
  
 
@@ -118,7 +118,7 @@ Figure 3 shows the coding hierarchy of the existing VRF models in EnergyPlus (V8
  
 The implementation of the VRF-FluidTCtrl-HR model will present additions to the existing VRF-FluidTCtrl-HP model, without changing the coding hierarchy of the key methods. Therefore, the implementation is expected to generate no or little impacts on the existing features of EnergyPlus. More specifically, the proposed algorithm will go to the method “HVACVariableRefrigerantFlow::CalcVRFCondenser_FluidTCtrl”, which was newly added in V8.4 particularly to describe the outdoor unit part of the VRF-FluidTCtrl-HP model. The indoor unit part of the current VRF-FluidTCtrl-HP model is able to handle the indoor unit performance of the HR systems, and thus will not be modified.
 
-![](VRF-CodingHierarchy.PNG)
+![](VRF-HR-CodingHierarchy.PNG)
 Figure 3. Coding Hierarchy of the VRF model in the current EnergyPlus V8.4
 
 
@@ -288,9 +288,9 @@ The air flow rate and SH/SC value of each indoor unit can be manipulated to adju
 
 The model is validated with Daikin laboratory measurement data on a typical 3-pipe VRF Heat Recovery Multi-Split System. The system employs two inverter controlled compressors and one fixed speed compressor, which can work jointly to vary the compressor operation mode for a variety of operational conditions. Five terminal units are installed to create numerous heating/cooling load combinations. Comprehensive measurement data was collected for 14 static condition cases, covering the cooling only mode, heating only mode, and mostly the simultaneous heating and cooling mode. The sensible and latent load (latent capacity only used in cooling mode) in each indoor unit are calculated using the measurement data, and then given to the simulation as the zone load using the schedule object and other equipment object. The simulated compressor performance is then compared with the measured data. As shown in Figure 5, the simulated compressor speed and power using the new VRF-HR model can present a satisfactory match with the measured data throughout all the operational modes at sub-hour levels.
 
-![](Validation_CompPower.png)
+![](VRF-HR-Validation_CompPower.png)
 (a) Compressor power (sub-hourly)
-![](Validation_CompSpeed.png)
+![](VRF-HR-Validation_CompSpeed.png)
 (b) Compressor speed (sub-hourly)
 
 Figure 5. Comparison of the measured and simulated compressor data under various operational modes
