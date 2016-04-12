@@ -37,6 +37,7 @@ The proposed new VRF-HR model inherits many key features of the recently impleme
 3)	Field A1 should just be "Name" not "Heat Pump Name",  same for the old ones and the VRF terminal units and the VRF list, so do we continue the pattern or fix them all? And why did we call all of these AirConditioner:VariableRefrigerantFlow:* instead of HeatPump:VariableRefrigerantFlow:? If we decide to rename these - that should be a separate pull request with transitions etc.  But this new object could come in with the HeatPump name right from the start.
 -	Reply: 
 1) The difference between the proposed VRF-FluidTCtrl-HR object and the existing VRF-FluidTCtrl-HP object lies in the fields about thermostat priority control, main pipe information, mode transition, and outdoor unit evaporator/condenser descriptions.
+2) Yes, we agree that they should be extensible. They are now put at the end of the object and thus requires little modification of the existing design. The number of compressor loading index depends on the experiment data from manufacturer, usually between 3 and 11.
 3) AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR will be used as a temporary design in the Interim Release, to be consistent with existing ones and to avoid transition issues. A poll will be held to select better names, and the selected design will be used for the next official release which will involve transition issues. This will be handled by setting a separate issue. (TBD: Renaming of the HP object (AirConditioner or HeatPump, VariableRefrigerantFlow or VRF, etc; Set up a new field to specify the system configuration: 2pipe or 3Pipe; etc. )
 
 -	Comments:
@@ -44,6 +45,7 @@ The proposed new VRF-HR model inherits many key features of the recently impleme
 2)	Is any of this new code going to follow the new OO design guidelines?
 -	Reply: 
 1) Currently Coil:Cooling:DX:VariableRefrigerantFlow:FluidTemperatureControl object for the VRF-FluidTCtrl model is handled in DXCoils.cc, to be consistent with Coil:Cooling:DX:VariableRefrigerantFlow object for the VRF-SysCurve model. A separate issue can be set up if we decide to move them out of DXCoils.cc. 
+2) Rongpeng will first focus on the HR algorithm implementations to ensure its functionality. Then Edwin will work with Rongpeng to implement more OO design for the VRF part. Very possibly this requires the modification of the codes for VRF-SysCurve model and VRF-FluidTCtrl-HP model, in addition to the proposed VRF-FluidTCtrl-HR model.
 
 
 •	Brent, Jan. 20. 2016
