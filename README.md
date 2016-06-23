@@ -1,7 +1,10 @@
 
 ## Comments and Reply ##
 
-**Comment: **Lawrence Scheier, Jun 6 
+**Comment: **
+
+Lawrence Scheier, Jun 6 
+
 The approach you are proposing seems sound and, just as important, easy to input but I have two basic concerns:
 
 1) Effect on Sizing: You state: "the fault model will only be applied at real weather simulations instead of the sizing and warm-up simulations". Would the faults be applied during the "Do HVAC Sizing Simulation for Sizing Periods" simulation? I am not sure how this would effect Brent's coincident sizing calcs. It seems like there would be a potential for the coincident plant size to be larger than the sum-of-the-peaks plant size since the faults would not be applied during the normal plant sizing. This might be a good thing or a bad thing. Not sure.
