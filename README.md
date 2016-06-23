@@ -1,7 +1,7 @@
 
 ## Comments and Reply ##
 
-**Comment: **
+**Comment**
 
 Lawrence Scheier, Jun 6 
 
@@ -11,7 +11,7 @@ The approach you are proposing seems sound and, just as important, easy to input
 
 2) Effect on plant/airside convergence: it seems like these operational faults could very easily cause the plant/airside controllers to totally lose control at some point, causing both plant temperatures, airside and space temperatures to oscillate wildly (and to unrealistic extremes). This happens often enough under normal circumstances (or bad user input) without adding operational faults to the mix. I can foresee a lot of situations where only the first few day's results are valid and the rest of the year becomes nonsensical because the mathematics go haywire. This is why I am not enamored with operational faults, in general. I think our models too sensitive in many cases to be purposefully throwing a wrench into the works. But perhaps testing will show me to be wrong on this count. 
 
-**Reply: **
+**Reply:**
 
 1) Effect on Sizing
 The proposed models aim to simulate and evaluate the faults occurred at the "operation" phase. We assume that these faults don't exist during the "design" phase, and therefore, the fault model should have no effect on any sizing related simulations, including the traditional sizing calculations and the coincident sizing calculations. 
