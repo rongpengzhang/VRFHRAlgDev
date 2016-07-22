@@ -49,12 +49,7 @@ N/A
 
 We propose to modify three existing IDD thermostat setpoint objects by adding a field to indicate which adaptive comfort model to use. The three thermostat setpoint objects are, ThermostatSetpoint:SingleCooling, ThermostatSetpoint:SingleHeatingOrCooling, and ThermostatSetpoint:DualSetpoint, which are referenced by the ZoneControl:Thermostat object.
 
-`print "`**`Hello world`**`";`
-`one`**`two`**`three`
-`one`**`two`**&#07;*`three`*
-> `sample`**`sample`**`sample`
-
-```
+<pre>
 ThermostatSetpoint:SingleCooling,
        \memo Used for a cooling only thermostat. The setpoint can be scheduled and varied throughout
        \memo the simulation but only cooling is allowed.
@@ -65,7 +60,7 @@ ThermostatSetpoint:SingleCooling,
   A2 , \field Setpoint Temperature Schedule Name
        \type object-list
        \object-list ScheduleNames
-  `**`A3`**` ; \field Adaptive Comfort Model Type
+  <b>A3</b> ; \field Adaptive Comfort Model Type
        \type choice
        \key None
        \key AdaptiveASH55
@@ -83,13 +78,15 @@ ThermostatSetpoint:SingleHeatingOrCooling,
   A2 , \field Setpoint Temperature Schedule Name
        \type object-list
        \object-list ScheduleNames
-  **A3** ; \field Adaptive Comfort Model Type
+  <b>
+  A3 ; \field Adaptive Comfort Model Type
        \type choice
        \key None
        \key AdaptiveASH55
        \key AdaptiveCEN15251
        \default None
        \note the setpoint temperature schedule will be adjusted based on the selected adaptive comfort model type
+  </b>
 
 
 ThermostatSetpoint:DualSetpoint,
@@ -113,7 +110,7 @@ ThermostatSetpoint:DualSetpoint,
        \default None
        \note the cooling setpoint temperature schedule will be adjusted based on the selected adaptive comfort model type
 
-```
+</pre>
 
 ## IO Ref ##
 To be developed.
