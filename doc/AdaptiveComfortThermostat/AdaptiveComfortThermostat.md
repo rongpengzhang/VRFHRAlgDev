@@ -32,10 +32,11 @@ This NFP will implement a new zone thermostat based on the adaptive comfort mode
 N/A
 
 ## Overview ##
+
 The adaptive comfort model has been adopted in EnergyPlus as one of the thermal comfort models of the People object, as well as one control strategy to operate windows in the Airflow Network model. The existing code will be reused as much as possible. We propose to enhance the existing ThermostatSetpoint objects to indicate the applicability of the adaptive comfort model with three choices: 
-- (1) None. The adaptive comfort model is not applicable; 
-- (2) AdaptiveASH55. The central line of the ASHRAE Standard 55-2010 adaptive comfort model will be used as the zone operative temperature setpoint; and 
-- (3) AdaptiveCEN15251. The central line of the CEN Standard 15251-2007 adaptive comfort model will be used as the zone operative temperature setpoint. 
+- **None**. The adaptive comfort model is not applicable; 
+- **AdaptiveASH55**. The central line of the ASHRAE Standard 55-2010 adaptive comfort model will be used as the zone operative temperature setpoint; and 
+- **AdaptiveCEN15251**. The central line of the CEN Standard 15251-2007 adaptive comfort model will be used as the zone operative temperature setpoint. 
 
 When the adaptive comfort model is selected, the thermostat setpoint temperature schedule will be overwritten with the calculated operative temperature based on the central line of the comfort model defined in ASHRAE 55-2010 or CEN 15251-2007. Such calculations have been implemented in EnergyPlus already. The ASHRAE adaptive comfort model is only applicable when the running average outdoor air temperature for the past 30 days is between 10.0 and 33.5°C; while the CEN 15251-2007 adaptive comfort model is only applicable when the running average outdoor air temperature for the past 7 days is between 10.0 and 30.0°C. 
 
@@ -59,7 +60,7 @@ ThermostatSetpoint:SingleCooling,
   A2 , \field Setpoint Temperature Schedule Name
        \type object-list
        \object-list ScheduleNames
-  A3 ; \field Adaptive Comfort Model Type
+  **A3** ; \field Adaptive Comfort Model Type
        \type choice
        \key None
        \key AdaptiveASH55
@@ -77,7 +78,7 @@ ThermostatSetpoint:SingleHeatingOrCooling,
   A2 , \field Setpoint Temperature Schedule Name
        \type object-list
        \object-list ScheduleNames
-  A3 ; \field Adaptive Comfort Model Type
+  **A3** ; \field Adaptive Comfort Model Type
        \type choice
        \key None
        \key AdaptiveASH55
@@ -99,7 +100,7 @@ ThermostatSetpoint:DualSetpoint,
   A3 , \field Cooling Setpoint Temperature Schedule Name
        \type object-list
        \object-list ScheduleNames
-  A4 ; \field Adaptive Comfort Model Type
+  **A4** ; \field Adaptive Comfort Model Type
        \type choice
        \key None
        \key AdaptiveASH55
@@ -108,16 +109,6 @@ ThermostatSetpoint:DualSetpoint,
        \note the cooling setpoint temperature schedule will be adjusted based on the selected adaptive comfort model type
 
 ```
- 
-## Testing/Validation/Data Source(s) ##
-Comparing simulation results with and without faults will be performed to ensure accuracy of the new features. 
-
-
-## Proposed Report Variables ##
-None
-
-## Proposed additions to Meters ##
-None
 
 ## IO Ref ##
 To be developed.
@@ -128,6 +119,12 @@ The Engineering Reference already described the adaptive comfort models for ASHR
 ## Example File and Transition Changes ##
 
 A new example will be created using the simple DOE small office reference model to demonstrate the new feature.
+
+## Proposed Report Variables ##
+None
+
+## Proposed additions to Meters ##
+None
 
 ## Transition changes ##
 N/A
