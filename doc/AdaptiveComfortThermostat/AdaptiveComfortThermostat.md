@@ -60,7 +60,7 @@ ThermostatSetpoint:SingleCooling,
   A2 , \field Setpoint Temperature Schedule Name
        \type object-list
        \object-list ScheduleNames
-  **A3** ; \field Adaptive Comfort Model Type
+  **`A3`** ; \field Adaptive Comfort Model Type
        \type choice
        \key None
        \key AdaptiveASH55
