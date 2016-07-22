@@ -49,6 +49,11 @@ N/A
 
 We propose to modify three existing IDD thermostat setpoint objects by adding a field to indicate which adaptive comfort model to use. The three thermostat setpoint objects are, ThermostatSetpoint:SingleCooling, ThermostatSetpoint:SingleHeatingOrCooling, and ThermostatSetpoint:DualSetpoint, which are referenced by the ZoneControl:Thermostat object.
 
+`print "`**`Hello world`**`";`
+`one`**`two`**`three`
+`one`**`two`**&#07;*`three`*
+> `sample`**`sample`**`sample`
+
 ```
 ThermostatSetpoint:SingleCooling,
        \memo Used for a cooling only thermostat. The setpoint can be scheduled and varied throughout
